@@ -97,6 +97,7 @@ def product_add_admin(request):
             fields['Description'] = request.POST.get('Description')
             fields['Avatar']= request.FILES.get('Avatar')
             fields['Link'] = request.POST.get('Link')
+            fields['Iframe'] = request.POST.get('Iframe')
             fields['Video']= request.FILES.get('Video')
             obj = Product.objects.create(**fields)
             return redirect('product_admin')
@@ -120,12 +121,14 @@ def product_edit_admin(request,pk):
             fields['Description'] = request.POST.get('Description')
             fields['Avatar']= request.FILES.get('Avatar')
             fields['Link'] = request.POST.get('Link')
+            fields['Iframe'] = request.POST.get('Iframe')
             fields['Video']= request.FILES.get('Video')
 
             obj = Product.objects.get(pk=pk)
             obj.Title = fields['Title']
             obj.Description = fields['Description']
             obj.Link = fields['Link']
+            obj.Iframe = fields['Iframe']
             if fields['Avatar']:
                 if obj.Avatar:   # nếu đã có file cũ
                     obj.Avatar.delete(save=False)  # xoá file cũ trong media

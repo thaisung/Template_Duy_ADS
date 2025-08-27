@@ -47,7 +47,8 @@ class Product(models.Model):
     Description = models.TextField('Mô tả',blank=True, null=True)
     Avatar = models.ImageField(upload_to='Avatar_Product', null=True,blank=True)
     Video = models.FileField(upload_to='Video_Product', null=True, blank=True)
-    Link = models.CharField('Link video', max_length=200,blank=True, null=True)
+    Link = models.CharField('Link video', max_length=10000,blank=True, null=True)
+    Iframe = models.CharField('Iframe video', max_length=10000,blank=True, null=True)
     Creation_time = models.DateTimeField('Thời gian tạo',auto_now_add=True)
     Update_time = models.DateTimeField('Thời gian cập nhật',auto_now=True)
 

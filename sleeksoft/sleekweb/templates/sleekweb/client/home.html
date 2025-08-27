@@ -46,7 +46,7 @@
 
   <!-- Overlay -->
    <div class="flex flex-col  w-full h-full p-3 relative z-10">
-      <div class="hidden lg:flex w-full items-center justify-center">
+      <div class="flex w-full items-center justify-center">
           {{Ads_1.Script|safe}}
       </div>
       <div class="flex w-full items-center justify-center">
@@ -56,8 +56,29 @@
         <div id="contentWrap" class="flex flex-col items-center text-center px-4 py-4 max-w-6xl">
 
           <!-- Poster -->
-          <img id="poster" src="{{ Product.Avatar.url }}" alt="Poster phim"
-              class="rounded-lg shadow-2xl mb-6 w-full lg:w-[327px] h-full">
+          <div class="relative flex justify-center items-center rounded-lg shadow-2xl mb-6 w-full lg:w-[600px] h-full overflow-hidden">
+            <img id="poster" src="{{ Product.Avatar.url }}" alt="Poster phim"
+              class="w-full h-full">
+              <div class="continueBtn absolute flex justify-center items-center cursor-pointer">
+                <svg width="80px" height="80px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+                    <title>play_circle_outline</title>
+                    <desc>Created with Sketch.</desc>
+                    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="Outlined" transform="translate(-136.000000, -952.000000)">
+                            <g id="Av" transform="translate(100.000000, 852.000000)">
+                                <g id="Outlined-/-AV-/-play_circle_outline" transform="translate(34.000000, 98.000000)">
+                                    <g>
+                                        <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
+                                        <path d="M10,16.5 L16,12 L10,7.5 L10,16.5 Z M12,2 C6.48,2 2,6.48 2,12 C2,17.52 6.48,22 12,22 C17.52,22 22,17.52 22,12 C22,6.48 17.52,2 12,2 Z M12,20 C7.59,20 4,16.41 4,12 C4,7.59 7.59,4 12,4 C16.41,4 20,7.59 20,12 C20,16.41 16.41,20 12,20 Z" id="🔹-Icon-Color" fill="#ffffff"></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+              </div>
+          </div>
 
           <!-- Tiêu đề -->
           <h2 class="text-white text-2xl font-bold mb-4">{{ Product.Title }}</h2>
@@ -69,16 +90,21 @@
 
           <!-- Nút -->
           <button id="continueBtn"
-                  class="bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:scale-105 transform transition">
+                  class="continueBtn bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:scale-105 transform transition">
             Tiếp tục xem
           </button>
 
           <!-- Video (ẩn trước) -->
-          <div id="playerWrap" class="w-1/2 max-w-4xl mt-8 hidden">
+          <div id="playerWrap" class="w-full lg:w-[600px] mt-8 hidden">
             {% if Product.Link %}
               <!-- Ưu tiên Link -->
-              <iframe id="playerFrame" class="w-full aspect-video rounded-xl shadow-2xl"
-                      src="{{ Product.Link|safe }}" allowfullscreen loading="lazy"></iframe>
+              <video id="player" class="w-full rounded-xl shadow-2xl" controls autoplay muted preload="metadata" poster="{{ Product.Avatar.url }}">
+                <source src="{{ Product.Link }}">
+                Trình duyệt không hỗ trợ video.
+              </video>
+            {% elif Product.Iframe %}
+              <!-- Ưu tiên Link -->
+              {{ Product.Iframe|safe }}
             {% elif Product.Video %}
               <!-- Nếu không có Link thì mới dùng Video upload -->
               <video id="player" class="w-full rounded-xl shadow-2xl" controls autoplay muted preload="metadata" poster="{{ Product.Avatar.url }}">
@@ -92,7 +118,7 @@
             {{Ads_4.Script|safe}}
         </div>
       </div>
-      <div class="hidden lg:flex w-full items-center justify-center">
+      <div class="flex w-full items-center justify-center">
           {{Ads_2.Script|safe}}
       </div>
    </div>
@@ -105,7 +131,7 @@
         showPlayer(true);
       }
 
-      $("#continueBtn").on("click", function() {
+      $(".continueBtn").on("click", function() {
         if (sessionStorage.getItem("ad_seen") !== "1") {
           // Lần đầu -> sang quảng cáo
           sessionStorage.setItem("ad_seen", "1");
@@ -119,7 +145,7 @@
       // Hàm hiện video
       function showPlayer(scrollToCenter = false) {
         $("#playerWrap").removeClass("hidden");
-        $("#continueBtn").hide();
+        $(".continueBtn").hide();
         $("#poster").hide();
         if (scrollToCenter) {
           $("html, body").animate({ scrollTop: $("#playerWrap").offset().top - 50 }, 400);

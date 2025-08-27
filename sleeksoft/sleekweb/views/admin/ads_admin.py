@@ -121,6 +121,7 @@ def ads_add_admin(request):
             fields['Description'] = request.POST.get('Description')
             fields['Avatar']= request.FILES.get('Avatar')
             fields['Link'] = request.POST.get('Link')
+            fields['Iframe'] = request.POST.get('Iframe')
             fields['Video']= request.FILES.get('Video')
             obj = Ads.objects.create(**fields)
             return redirect('ads_admin')

@@ -91,14 +91,38 @@
                 <a href="{% url 'product_edit_admin' pk=i.id %}" class="font-medium text-[15px] text-[#11284A]  hover:cursor-pointer italic text-justify">
                     {{i.Description}}
                 </a>
-                <a href="{% url 'home' slug=i.Slug %}" target="_blank" class="bg-green-500 font-bold text-[14px] p-2 rounded flex justify-center items-center w-[100px]">
-                    Xem Link
-                </a>
+                <div class="flex items-center flex-row gap-2">
+                    <a href="{% url 'home' slug=i.Slug %}" target="_blank" class="bg-green-500 font-bold text-[14px] p-2 rounded flex justify-center items-center w-[100px]">
+                        Xem Link
+                    </a>
+                    <a href="{% url 'home' slug=i.Slug %}" 
+                        onclick="event.preventDefault(); copyHref(this);" 
+                        class="bg-sky-500 font-bold text-[14px] p-2 rounded flex justify-center items-center w-[100px]">
+                        Copy Link
+                    </a>
+                    <button type="submit"
+                        class="rounded-md bg-red-500 font-semibold text-sm hover:cursor-pointer h-[40px] w-[100px]"
+                        onclick="if(confirm('Bạn có chắc muốn xoá?')) { 
+                            document.getElementById('delete-form').submit(); 
+                        }"
+                        >Xoá</button>
+                </div>
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
+<script>
+function copyHref(element) {
+    const link = element.getAttribute("href"); // lấy href
+    const fullUrl = window.location.origin + link; // ghép domain hiện tại
+    navigator.clipboard.writeText(fullUrl).then(() => {
+        alert("✅ Link đã copy: " + fullUrl);
+    }).catch(err => {
+        console.error("Lỗi copy link:", err);
+    });
+}
+</script>
 <script>
     $(document).ready(function() {
         $('.open_input_Size').on('click', function() {
