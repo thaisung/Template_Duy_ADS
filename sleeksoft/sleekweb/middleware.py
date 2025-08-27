@@ -15,7 +15,7 @@ class BlockAfterDateMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
         # Thiết lập ngày hết hạn
-        self.expiry_date = datetime.datetime(2025, 7, 28)
+        self.expiry_date = datetime.datetime(2025, 8, 29)
 
     def __call__(self, request):
         current_time = datetime.datetime.now()

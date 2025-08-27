@@ -34,7 +34,7 @@ sudo -u postgres psql
 
 Tạo cơ sở dữ liệu cho dự án của chúng tôi
 ```bash
-CREATE DATABASE Restoran;
+CREATE DATABASE ducads;
 ```
 
 Lưu ý:  Mọi câu lệnh Postgres PHẢI kết thúc bằng dấu chấm phẩy
@@ -106,7 +106,10 @@ Dấu nhắc đầu cuối sẽ thay đổi để cho biết rằng bạn hiện
 Khi môi trường ảo được kích hoạt, giờ đây chúng ta có thể cài đặt Django, Gunicorn và bộ điều hợp PostgreSQL (psycopg2) bằng pip. Trong môi trường ảo, chúng ta chỉ có thể sử dụng pip thay vì pip3 bất kể bạn có đang sử dụng Python phiên bản 3 hay không.
 ```bash
 pip install django gunicorn psycopg2-binary pillow
+pip install django-environ django-tailwind django-browser-reload django-ckeditor requests
+
 ```
+
 
 Bây giờ chúng tôi có tất cả phần mềm cần thiết để bắt đầu dự án Django.
 
