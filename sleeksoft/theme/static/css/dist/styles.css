@@ -1724,6 +1724,10 @@ select {
     width: 600px;
   }
 
+  .lg\:min-w-\[200px\] {
+    min-width: 200px;
+  }
+
   .lg\:flex-row {
     flex-direction: row;
   }

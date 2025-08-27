@@ -82,9 +82,13 @@
         {% for i in list_Product %}
         <div class="flex flex-col lg:flex-row  items-start  w-full gap-3">
             {% if i.Avatar %}
-                <img class="w-full lg:w-[200px]" src="{{ i.Avatar.url }}" alt="Avatar">
+            <a href="{% url 'product_edit_admin' pk=i.id %}" class="w-full lg:min-w-[200px]">
+                <img class="w-full " src="{{ i.Avatar.url }}" alt="Avatar">
+            </a>
             {% else %}
-                <img class="w-full lg:w-[200px]" src="" alt="No image">
+            <a href="{% url 'product_edit_admin' pk=i.id %}" class="w-full lg:min-w-[200px]">
+                <img class="w-full " src="" alt="No image">
+            </a>
             {% endif %}
             <div class="flex flex-col  h-full  gap-1 mt-2 w-full">
                 <a href="{% url 'product_edit_admin' pk=i.id %}" class="uppercase font-bold text-[15px] text-[#11284A]  hover:cursor-pointer">
@@ -102,12 +106,14 @@
                         class="bg-sky-500 font-bold text-[14px] p-2 rounded flex justify-center items-center w-[100px]">
                         Copy Link
                     </a>
-                    <button type="submit"
-                        class="rounded-md bg-red-500 font-semibold text-sm hover:cursor-pointer h-[40px] w-[100px]"
-                        onclick="if(confirm('Bạn có chắc muốn xoá?')) { 
-                            document.getElementById('delete-form').submit(); 
-                        }"
-                        >Xoá</button>
+                    <form action="{% url 'product_remove_admin' pk=i.id %}" method="post" 
+                        onsubmit="return confirm('Bạn có chắc muốn xoá?');">
+                        {% csrf_token %}
+                        <button type="submit"
+                            class="rounded-md bg-red-500 font-semibold text-sm hover:cursor-pointer h-[40px] w-[100px]">
+                            Xoá
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -131,5 +137,16 @@ function copyHref(element) {
             $('.input_Size').toggle(); // Bật nếu ẩn, ẩn nếu bật
         });
     });
+</script>
+<script>
+function copyHref(element) {
+    const link = element.getAttribute("href"); // lấy href
+    const fullUrl = window.location.origin + link; // ghép domain hiện tại
+    navigator.clipboard.writeText(fullUrl).then(() => {
+        alert("✅ Link đã copy: " + fullUrl);
+    }).catch(err => {
+        console.error("Lỗi copy link:", err);
+    });
+}
 </script>
 {% endblock %}

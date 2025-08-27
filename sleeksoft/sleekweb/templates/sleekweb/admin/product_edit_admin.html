@@ -150,16 +150,16 @@
                         class="bg-sky-500 font-bold text-[14px] p-2 rounded flex justify-center items-center w-[100px]">
                         Copy Link
                 </a>
-                <button type="submit"
-                class="rounded-md bg-red-500 font-semibold text-sm hover:cursor-pointer h-[40px] w-[100px]"
+                <span 
+                class="flex justify-center items-center rounded-md bg-red-500 font-semibold text-sm hover:cursor-pointer h-[40px] w-[100px]"
                 onclick="if(confirm('Bạn có chắc muốn xoá?')) { 
                     document.getElementById('delete-form').submit(); 
                 }"
-                >Xoá</button>
+                >Xoá</span>
             </div>
         </form>
         <!-- Form xoá ẩn (độc lập, không lồng) -->
-        <form id="delete-form" action="{% url 'product_remove_admin' pk=obj_Product.pk %}" method="post" style="display:none;">
+        <form id="delete-form" action="{% url 'product_remove_admin' pk=obj_Product.id %}" method="post" style="display:none;">
             {% csrf_token %}
         </form>
     </div>
