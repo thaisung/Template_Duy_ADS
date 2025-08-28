@@ -95,7 +95,7 @@
           </button>
 
           <!-- Video (ẩn trước) -->
-          <div id="playerWrap" class="w-full lg:w-[800px] mt-8 hidden">
+          <div id="playerWrap" class="lg:max-w-[800px] mt-8 hidden">
             {% if Product.Link %}
               <!-- Ưu tiên Link -->
               <video id="player" class="w-full rounded-xl shadow-2xl" controls autoplay muted preload="metadata" poster="{{ Product.Avatar.url }}">

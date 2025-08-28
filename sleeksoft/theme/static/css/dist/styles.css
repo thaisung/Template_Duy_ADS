@@ -1708,6 +1708,10 @@ select {
     max-width: 72rem;
   }
 
+  .lg\:max-w-\[800px\] {
+    max-width: 800px;
+  }
+
   .lg\:flex-row {
     flex-direction: row;
   }
