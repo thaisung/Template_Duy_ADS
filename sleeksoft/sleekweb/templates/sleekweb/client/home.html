@@ -56,7 +56,7 @@
         <div id="contentWrap" class="flex flex-col items-center text-center px-4 py-4 w-full lg:max-w-6xl">
 
           <!-- Poster -->
-          <div class="relative flex justify-center items-center rounded-lg shadow-2xl mb-6 w-full lg:w-[600px] h-full overflow-hidden">
+          <div class="relative flex justify-center items-center rounded-lg shadow-2xl mb-6 w-full lg:w-[800px] h-full overflow-hidden">
             <img id="poster" src="{{ Product.Avatar.url }}" alt="Poster phim"
               class="w-full h-full">
               <div class="continueBtn absolute flex justify-center items-center cursor-pointer">
@@ -95,7 +95,7 @@
           </button>
 
           <!-- Video (ẩn trước) -->
-          <div id="playerWrap" class="w-full lg:w-[600px] mt-8 hidden">
+          <div id="playerWrap" class="w-full lg:w-[800px] mt-8 hidden">
             {% if Product.Link %}
               <!-- Ưu tiên Link -->
               <video id="player" class="w-full rounded-xl shadow-2xl" controls autoplay muted preload="metadata" poster="{{ Product.Avatar.url }}">
