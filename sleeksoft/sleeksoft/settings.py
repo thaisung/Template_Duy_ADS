@@ -187,10 +187,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 
-USE_I18N = True
+# USE_I18N = True
 
+# USE_TZ = True
+
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
 USE_TZ = True
 
 
@@ -210,5 +213,4 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TIME_ZONE = 'Asia/Ho_Chi_Minh'
-USE_TZ = True
+

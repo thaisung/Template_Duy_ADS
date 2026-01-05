@@ -61,6 +61,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import base64
 
+from django.utils.timezone import localtime
 
 
     
@@ -158,7 +159,7 @@ def copy_log(request):
         return JsonResponse({
             "status": "ok",
             "content_id": content_id,
-            "copied_at": log.copied_at.strftime("%d/%m/%Y %H:%M:%S")
+            "copied_at": localtime(log.copied_at).strftime("%d/%m/%Y %H:%M:%S")
         })
 
 def get_copy_logs(request):
@@ -168,5 +169,5 @@ def get_copy_logs(request):
         data = {}
         for content in contents:
             logs = content.copy_logs.all().order_by('-copied_at')[:20]  # Lấy 20 bản ghi mới nhất
-            data[content.id] = [log.copied_at.strftime("%d/%m/%Y %H:%M:%S") for log in logs]
+            data[content.id] = [localtime(log.copied_at).strftime("%d/%m/%Y %H:%M:%S") for log in logs]
         return JsonResponse({"copy_logs": data})
