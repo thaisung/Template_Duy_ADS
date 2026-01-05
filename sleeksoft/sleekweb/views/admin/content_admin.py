@@ -109,8 +109,14 @@ def content_add_admin(request):
             fields = {}
             content = request.POST.get('content', '')
             content = content.strip()
-            fields['content'] = content
-            obj = Content.objects.create(**fields)
+
+            lines = content.splitlines()  # tự xử lý \n, \r\n
+            print("lines:",lines)
+            for line in lines:
+                line = line.strip()
+                if line:  # bỏ dòng trống
+                    fields['content'] = line
+                    obj = Content.objects.create(**fields)
             return redirect('content_admin')
         else:
             return redirect('login_admin')
