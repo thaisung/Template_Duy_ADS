@@ -392,6 +392,33 @@
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
+
+        .content-text {
+            white-space: pre-wrap;
+            font-family: monospace;
+            background: #0b1a33;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
     </style>
 </head>
 
@@ -420,9 +447,7 @@
         <div class="content-grid">
             {% for i in list_Content %}
             <div class="content-card">
-                <div class="content-text">
-                    {{ i.content }}
-                </div>
+                <div class="content-text max-h-[200px] overflow-y-auto" id="content-{{ i.id }}">{{ i.content }}</div>
                 <button class="copy-btn" data-id="{{ i.id }}" data-content="{{ i.content|escapejs }}">
                     <svg viewBox="0 0 24 24">
                         <path
@@ -481,7 +506,7 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">✅ Đã copy thành công!</div>
 
-    <script>
+    <!-- <script>
         // Copy functionality
         $(document).on('click', '.copy-btn', function () {
             const btn = $(this);
@@ -516,6 +541,72 @@
                     const container = $("#copy-times-" + res.content_id);
                     container.find(".no-logs").remove();
                     container.prepend(`<div class="copy-log-item new">${res.copied_at}</div>`);
+                }
+            });
+        });
+
+        // Polling every 5 seconds
+        function refreshCopyLogs() {
+            $.ajax({
+                url: "{% url 'get_copy_logs' %}",
+                method: "GET",
+                success: function (res) {
+                    for (const [contentId, logs] of Object.entries(res.copy_logs)) {
+                        const container = $("#copy-times-" + contentId);
+                        container.empty();
+
+                        if (logs.length === 0) {
+                            container.append('<div class="no-logs">Chưa có lần copy nào</div>');
+                        } else {
+                            logs.forEach(function (time) {
+                                container.append(`<div class="copy-log-item">${time}</div>`);
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        setInterval(refreshCopyLogs, 5000);
+    </script> -->
+    <script>
+        // Copy functionality
+        $(document).on("click", ".copy-btn", function () {
+            const btn = $(this);
+            const contentId = btn.data("id");
+
+            // 🔥 COPY TỪ DOM (GIỮ XUỐNG DÒNG, DÁN YOUTUBE CHUẨN)
+            const content = document.getElementById("content-" + contentId).innerText;
+
+            navigator.clipboard.writeText(content).then(() => {
+                // Show toast
+                const toast = $('#toast');
+                toast.addClass('show');
+                setTimeout(() => toast.removeClass('show'), 2000);
+
+                // Change button state
+                btn.addClass('copied');
+                btn.find('span').text('Copied!');
+                setTimeout(() => {
+                    btn.removeClass('copied');
+                    btn.find('span').text('Copy');
+                }, 2000);
+            });
+
+            // Send to server
+            $.ajax({
+                url: "{% url 'copy_log' %}",
+                method: "POST",
+                data: {
+                    content_id: contentId,
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+                },
+                success: function (res) {
+                    const container = $("#copy-times-" + res.content_id);
+                    container.find(".no-logs").remove();
+                    container.prepend(
+                        `<div class="copy-log-item new">${res.copied_at}</div>`
+                    );
                 }
             });
         });

@@ -1089,12 +1089,28 @@ select {
   height: 100vh;
 }
 
+.h-\[100px\] {
+  height: 100px;
+}
+
 .max-h-\[60px\] {
   max-height: 60px;
 }
 
+.max-h-\[200px\] {
+  max-height: 200px;
+}
+
+.max-h-\[500px\] {
+  max-height: 500px;
+}
+
 .min-h-screen {
   min-height: 100vh;
+}
+
+.min-h-\[200px\] {
+  min-height: 200px;
 }
 
 .w-3\/4 {
@@ -1244,6 +1260,10 @@ select {
 
 .overflow-x-auto {
   overflow-x: auto;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
 }
 
 .rounded {
