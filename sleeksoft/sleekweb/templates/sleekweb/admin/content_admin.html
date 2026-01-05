@@ -453,6 +453,19 @@
             <p>Bấm "Thêm mới" để tạo nội dung đầu tiên</p>
         </div>
         {% endfor %}
+        {% if list_Content %}
+        <div class="w-full flex items-center justify-center py-6">
+            <form method="post" action="{% url 'content_remove_all_admin' %}" style="display: inline;"
+                onsubmit="return confirm('Bạn có chắc chắn muốn xoá tất cả bản ghi này không?');">
+                {% csrf_token %}
+                <button type="submit"
+                    class=" bg-red-700 font-bold px-5 py-3 rounded-lg transition-all duration-300 ease-out hover:bg-red-800 hover:scale-105 hover:shadow-lg active:scale-95">
+                    <i class="fas fa-trash"></i> Xoá tất cả
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
     </div>
 
     <!-- Pagination -->

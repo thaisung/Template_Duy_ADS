@@ -97,6 +97,8 @@ urlpatterns = [
     path('admin/content/add', content_add_admin,name='content_add_admin'),
     path('admin/content/edit/<int:pk>/', content_edit_admin,name='content_edit_admin'),
     path('admin/content/remove/<int:pk>/', content_remove_admin,name='content_remove_admin'),
+    path('admin/content/remove-all/', content_remove_all_admin,name='content_remove_all_admin'),
+
 
     path("copy-log/", copy_log, name="copy_log"),
     path("get-copy-logs/", get_copy_logs, name="get_copy_logs"),

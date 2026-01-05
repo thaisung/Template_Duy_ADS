@@ -156,6 +156,18 @@ def content_remove_admin(request,pk):
             return redirect('content_admin')
     else:
         return redirect('login_admin')
+
+def content_remove_all_admin(request):
+    if request.user.is_authenticated and request.user.is_superuser:
+        if request.method == 'POST':
+            try:
+                obj = Content.objects.all()
+                obj.delete()
+            except:
+                print('not')
+            return redirect('content_admin')
+    else:
+        return redirect('login_admin')
         
 def copy_log(request):
     if request.method == 'POST':
