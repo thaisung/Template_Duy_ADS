@@ -106,8 +106,10 @@ def content_add_admin(request):
     elif request.method == 'POST':
         if request.user.is_authenticated and request.user.is_superuser:
             fields = {}
-            fields['content'] = request.POST.get('content')
-            obj = Content.objects.create(**fields)
+            content = request.POST.get('content', '')
+            # loại bỏ xuống dòng
+            content = content.replace('\r\n', ' ').replace('\n', ' ').strip()
+            fields['content'] = content
             return redirect('content_admin')
         else:
             return redirect('login_admin')
