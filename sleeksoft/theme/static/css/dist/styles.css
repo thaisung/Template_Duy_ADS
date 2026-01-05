@@ -1544,6 +1544,18 @@ select {
   line-height: 1.75rem;
 }
 
+.text-\[20px\] {
+  font-size: 20px;
+}
+
+.text-\[16px\] {
+  font-size: 16px;
+}
+
+.text-\[22px\] {
+  font-size: 22px;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -1728,6 +1740,18 @@ select {
   .lg\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
+  }
+
+  .lg\:text-\[16px\] {
+    font-size: 16px;
+  }
+
+  .lg\:text-\[20px\] {
+    font-size: 20px;
+  }
+
+  .lg\:text-\[30px\] {
+    font-size: 30px;
   }
 }
 
