@@ -64,7 +64,7 @@ ALTER ROLE postgres SET timezone TO 'UTC';
 
 Bây giờ, hãy cung cấp cho người dùng cơ sở dữ liệu của chúng tôi 'postgres' để có tất cả các đặc quyền trong cơ sở dữ liệu 'Restoran' .
 ```bash
-GRANT ALL PRIVILEGES ON DATABASE Restoran TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE ducads TO postgres;
 ```
 
 Bây giờ chúng tôi đã tạo thành công cơ sở dữ liệu và người dùng cơ sở dữ liệu có tất cả các đặc quyền đối với cơ sở dữ liệu mà chúng tôi đã tạo trong PostgreSQL. Thoát khỏi môi trường Postgres.
@@ -107,7 +107,6 @@ Khi môi trường ảo được kích hoạt, giờ đây chúng ta có thể c
 ```bash
 pip install django gunicorn psycopg2-binary pillow
 pip install django-environ django-tailwind django-browser-reload django-ckeditor requests
-
 ```
 
 
@@ -312,6 +311,7 @@ Hướng dẫn Nginx về nơi tìm các tệp tĩnh mà chúng tôi đã thu th
 ```bash
 server {
     server_name vinhvu.xyz;
+    client_max_body_size 1G;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
@@ -380,3 +380,6 @@ Bây giờ khởi động lại máy chủ.
 ```bash
 reboot
 ```
+
+sudo chown -R www-data:www-data /home/sleekproject/sleeksoft/upload
+sudo chmod -R 775 /home/sleekproject/sleeksoft/upload

@@ -47,6 +47,7 @@ from .views.client.menu_client import *
 from .views.client.service_client import *
 from .views.client.team_client import *
 from .views.client.testimonial_client import *
+from .views.client.content_client import *
 
 
 from .views.client.login_client import *
@@ -56,6 +57,7 @@ from django.contrib.sitemaps.views import sitemap
 from .views.admin.login_admin import *
 from .views.admin.product_admin import *
 from .views.admin.ads_admin import *
+from .views.admin.content_admin import *
 
 
 sitemaps_dict = {
@@ -91,6 +93,15 @@ urlpatterns = [
     path('admin/ads/edit/', ads_edit_admin,name='ads_edit_admin'),
     path('admin/ads/remove/<int:pk>/', ads_remove_admin,name='ads_remove_admin'),
 
+    path('admin/content', content_admin,name='content_admin'),
+    path('admin/content/add', content_add_admin,name='content_add_admin'),
+    path('admin/content/edit/<int:pk>/', content_edit_admin,name='content_edit_admin'),
+    path('admin/content/remove/<int:pk>/', content_remove_admin,name='content_remove_admin'),
+
+    path("copy-log/", copy_log, name="copy_log"),
+    path("get-copy-logs/", get_copy_logs, name="get_copy_logs"),
+
+    path('content/', content_client, name='content_client'),
 
 
 

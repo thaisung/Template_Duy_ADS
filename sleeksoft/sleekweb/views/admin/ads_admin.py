@@ -98,6 +98,8 @@ def ads_admin(request):
         # else:
         #     return redirect('login_admin')
 
+        context['ads_pages'] = [ 'ads_admin', 'ads_add_admin', 'ads_edit_admin']
+
         return render(request, 'sleekweb/admin/ads_admin.html', context, status=200)
     else:
         print('lỗi')
@@ -109,6 +111,7 @@ def ads_add_admin(request):
         context = {}
         context['domain'] = settings.DOMAIN
         # print('context:',context)
+        context['ads_pages'] = [ 'ads_admin', 'ads_add_admin', 'ads_edit_admin']
         if request.user.is_authenticated and request.user.is_superuser:
             return render(request, 'sleekweb/admin/ads_add_admin.html', context, status=200)
         else:

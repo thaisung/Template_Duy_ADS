@@ -74,3 +74,26 @@ class Ads(models.Model):
     Count = models.IntegerField('Số',blank=True, null=True)
     Creation_time = models.DateTimeField('Thời gian tạo',auto_now_add=True)
     Update_time = models.DateTimeField('Thời gian cập nhật',auto_now=True)
+
+class Content(models.Model):
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Content {self.id}"
+
+class CopyLog(models.Model):
+    content = models.ForeignKey(
+        Content,
+        on_delete=models.CASCADE,
+        related_name="copy_logs",
+        db_index=True
+    )
+    copied_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-copied_at"]
+        indexes = [
+            models.Index(fields=["content", "copied_at"]),
+        ]
+

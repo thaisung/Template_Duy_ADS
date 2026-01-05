@@ -1,181 +1,611 @@
 {% extends './base.html' %}
 {% block title %}Chỉnh sửa Sản phẩm{% endblock %}
 {% block content %}
-<div class="w-full flex-col min-h-screen">
-    <div class="flex flex-col lg:flex-row items-center  lg:justify-between border-b-[1px] border-[#0e203c] lg:max-h-[50px] px-3 py-2 font-bold">
-        <span class="uppercase w-full flex justify-center lg:justify-start">
-            Trang cập nhật Video
-        </span>
-        <div class="flex items-center gap-3 max-h-[60px] lg:max-h-none">
-            <div class="flex items-center justify-center rounded-full border-[1px] border-[#0e203c] px-2">
-                <input class="font-medium text-sm" placeholder="Tìm kiếm"
-                    style="border: none !important; outline: none !important; background: transparent;" />
-                <svg class="w-[25px]" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
-                    <g>
-                        <path
-                            d="M51.6,96.7c11,0,21-3.9,28.8-10.5l35,35c0.8,0.8,1.8,1.2,2.9,1.2s2.1-0.4,2.9-1.2c1.6-1.6,1.6-4.2,0-5.8l-35-35   c6.5-7.8,10.5-17.9,10.5-28.8c0-24.9-20.2-45.1-45.1-45.1C26.8,6.5,6.5,26.8,6.5,51.6C6.5,76.5,26.8,96.7,51.6,96.7z M51.6,14.7   c20.4,0,36.9,16.6,36.9,36.9C88.5,72,72,88.5,51.6,88.5c-20.4,0-36.9-16.6-36.9-36.9C14.7,31.3,31.3,14.7,51.6,14.7z">
-                        </path>
-                    </g>
-                </svg>
-            </div>
-            <a href="{% url 'product_add_admin' %}">
-                <svg class="w-[35px] fill-[#0e203c]" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="438.533px" height="438.533px"
-                    viewBox="0 0 438.533 438.533" style="enable-background:new 0 0 438.533 438.533;"
-                    xml:space="preserve">
-                    <g>
-                        <path d="M409.133,109.203c-19.608-33.592-46.205-60.189-79.798-79.796C295.736,9.801,259.058,0,219.273,0
-                            c-39.781,0-76.47,9.801-110.063,29.407c-33.595,19.604-60.192,46.201-79.8,79.796C9.801,142.8,0,179.489,0,219.267
-                            c0,39.78,9.804,76.463,29.407,110.062c19.607,33.592,46.204,60.189,79.799,79.798c33.597,19.605,70.283,29.407,110.063,29.407
-                            s76.47-9.802,110.065-29.407c33.593-19.602,60.189-46.206,79.795-79.798c19.603-33.596,29.403-70.284,29.403-110.062
-                            C438.533,179.485,428.732,142.795,409.133,109.203z M347.179,237.539c0,4.948-1.811,9.236-5.428,12.847
-                            c-3.62,3.614-7.901,5.428-12.847,5.428h-73.091v73.084c0,4.948-1.813,9.232-5.428,12.854c-3.613,3.613-7.897,5.421-12.847,5.421
-                            h-36.543c-4.948,0-9.231-1.808-12.847-5.421c-3.617-3.621-5.426-7.905-5.426-12.854v-73.084h-73.089
-                            c-4.948,0-9.229-1.813-12.847-5.428c-3.616-3.61-5.424-7.898-5.424-12.847v-36.547c0-4.948,1.809-9.231,5.424-12.847
-                            c3.617-3.617,7.898-5.426,12.847-5.426h73.092v-73.089c0-4.949,1.809-9.229,5.426-12.847c3.616-3.616,7.898-5.424,12.847-5.424
-                            h36.547c4.948,0,9.233,1.809,12.847,5.424c3.614,3.617,5.428,7.898,5.428,12.847v73.089h73.084c4.948,0,9.232,1.809,12.847,5.426
-                            c3.617,3.615,5.428,7.898,5.428,12.847V237.539z"></path>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                </svg>
-            </a>
-        </div>
-        <style>
-            input:focus {
-                outline: none !important;
-            }
-        </style>
+<style>
+    .product-edit-container {
+        padding: 24px;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        margin-bottom: 32px;
+        text-align: center;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #f59e0b, #f97316, #ef4444);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-title i {
+        background: linear-gradient(135deg, #f59e0b, #f97316);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle {
+        color: var(--text-secondary, #94a3b8);
+        font-size: 0.95rem;
+    }
+
+    .form-card {
+        max-width: 700px;
+        margin: 0 auto;
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        padding: 32px;
+        box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.3),
+            0 0 40px rgba(249, 115, 22, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .form-card:hover {
+        border-color: rgba(249, 115, 22, 0.3);
+        box-shadow:
+            0 8px 30px rgba(0, 0, 0, 0.4),
+            0 0 60px rgba(249, 115, 22, 0.15);
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary, #f1f5f9);
+        margin-bottom: 10px;
+    }
+
+    .form-label i {
+        color: #f97316;
+        font-size: 1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .form-input,
+    .form-textarea {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(51, 65, 85, 0.6);
+        border-radius: 12px;
+        color: var(--text-primary, #f1f5f9);
+        font-size: 0.95rem;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .form-textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: #f97316;
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        background: rgba(15, 23, 42, 0.8);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+        color: var(--text-muted, #64748b);
+    }
+
+    /* File Upload Styling */
+    .file-upload-wrapper {
+        position: relative;
+    }
+
+    .file-upload-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(15, 23, 42, 0.5);
+        border: 2px dashed rgba(249, 115, 22, 0.4);
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .file-upload-label:hover {
+        border-color: rgba(249, 115, 22, 0.7);
+        background: rgba(15, 23, 42, 0.7);
+    }
+
+    .file-upload-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #f59e0b, #f97316);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .file-upload-text {
+        font-size: 0.9rem;
+        color: var(--text-secondary, #94a3b8);
+        text-align: center;
+    }
+
+    .file-upload-text span {
+        color: #f97316;
+        font-weight: 600;
+    }
+
+    .file-upload-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Section Divider */
+    .section-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 28px 0;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.3), transparent);
+    }
+
+    .section-divider span {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-secondary, #94a3b8);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Priority Note */
+    .priority-note {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 18px;
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        border-radius: 12px;
+        margin-bottom: 24px;
+    }
+
+    .priority-note i {
+        color: #fbbf24;
+        font-size: 1.1rem;
+    }
+
+    .priority-note span {
+        font-size: 0.9rem;
+        color: var(--text-secondary, #94a3b8);
+        line-height: 1.5;
+    }
+
+    /* Preview Section */
+    .preview-section {
+        margin-bottom: 24px;
+    }
+
+    .preview-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary, #f1f5f9);
+        margin-bottom: 16px;
+    }
+
+    .preview-label i {
+        color: #8b5cf6;
+    }
+
+    .preview-grid {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(15, 23, 42, 0.5);
+        border-radius: 16px;
+        border: 1px solid rgba(51, 65, 85, 0.4);
+    }
+
+    .preview-grid img,
+    .preview-grid video,
+    .preview-grid iframe {
+        max-height: 200px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        min-width: 120px;
+    }
+
+    .btn-update {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-update:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-copy {
+        background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        color: white;
+        box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+    }
+
+    .btn-copy:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(14, 165, 233, 0.4);
+    }
+
+    .btn-copy.copied {
+        background: linear-gradient(135deg, #10b981, #059669);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-view {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-view:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-back {
+        background: rgba(51, 65, 85, 0.5);
+        color: var(--text-secondary, #94a3b8);
+        border: 1px solid rgba(51, 65, 85, 0.6);
+    }
+
+    .btn-back:hover {
+        background: rgba(51, 65, 85, 0.7);
+        color: var(--text-primary, #f1f5f9);
+        border-color: rgba(71, 85, 105, 0.8);
+    }
+
+    .btn:active {
+        transform: translateY(0);
+    }
+
+    /* Input Group with Icon */
+    .input-with-icon {
+        position: relative;
+    }
+
+    .input-with-icon .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted, #64748b);
+        font-size: 1rem;
+    }
+
+    .input-with-icon .form-input {
+        padding-left: 48px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .product-edit-container {
+            padding: 16px;
+        }
+
+        .form-card {
+            padding: 24px 20px;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .file-upload-label {
+            padding: 16px;
+        }
+
+        .file-upload-icon {
+            font-size: 1.8rem;
+        }
+
+        .preview-grid {
+            padding: 12px;
+        }
+
+        .preview-grid img,
+        .preview-grid video,
+        .preview-grid iframe {
+            max-height: 150px;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+</style>
+
+<div class="product-edit-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-edit"></i>
+            Chỉnh Sửa Video
+        </h1>
+        <p class="page-subtitle">Cập nhật thông tin video của bạn</p>
     </div>
-    <div class="flex justify-center  h-full gap-3 pt-[30px] p-3">
-        <form method="post" action="{% url 'product_edit_admin' pk=obj_Product.id %}" enctype="multipart/form-data" class="flex flex-col  items-center w-[500px] gap-3 ">
+
+    <div class="form-card">
+        <form method="post" action="{% url 'product_edit_admin' pk=obj_Product.id %}" enctype="multipart/form-data">
             {% csrf_token %}
-            <!-- <input type="hidden" name="id" value="{{i.id}}" /> -->
-            <div class="flex flex-col justify-center items-center w-full">
-                <label class="font-semibold">
+
+            <!-- Tiêu đề -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-heading"></i>
                     Tiêu đề
                 </label>
-                <input type="text" name="Title" value="{{obj_Product.Title}}" class="rounded-md w-full" required />
+                <input type="text" name="Title" value="{{obj_Product.Title}}" class="form-input"
+                    placeholder="Nhập tiêu đề video..." required />
             </div>
-            <div class="flex flex-col justify-center items-center w-full">
-                <label class="font-semibold">
+
+            <!-- Mô tả -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-align-left"></i>
                     Mô tả
                 </label>
-                <textarea class="rounded-md w-full h-[60px] p-3" name="Description" required>{{obj_Product.Description}}</textarea>
+                <textarea class="form-textarea" name="Description" placeholder="Nhập mô tả video..."
+                    required>{{obj_Product.Description}}</textarea>
             </div>
-            <div class="flex justify-center items-center gap-1 bg-white p-2 rounded-md border-[1px] border-[#6b7280] w-full">
-                <div class="flex flex-col justify-center items-center">
-                    <label class="font-semibold">
-                        Ảnh đại diện
+
+            <!-- Ảnh đại diện -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-image"></i>
+                    Ảnh đại diện
+                </label>
+                <div class="file-upload-wrapper">
+                    <label class="file-upload-label">
+                        <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                        <div class="file-upload-text">
+                            <span>Click để chọn ảnh mới</span> hoặc kéo thả
+                        </div>
                     </label>
-                    <input type="file" class="rounded-md w-full" accept="image/*" name="Avatar"  />
+                    <input type="file" class="file-upload-input" accept="image/*" name="Avatar" id="avatar-input" />
                 </div>
             </div>
-            <div class="flex flex-col justify-center items-center w-full">
-                <label class="font-semibold">
+
+            <div class="section-divider">
+                <span>Video Source</span>
+            </div>
+
+            <div class="priority-note">
+                <i class="fas fa-info-circle"></i>
+                <span>Video sẽ hiển thị theo thứ tự ưu tiên: <strong>Link → Iframe → Video Upload</strong></span>
+            </div>
+
+            <!-- Link video -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-link"></i>
                     Link video
                 </label>
-                <input type="text" name="Link" value="{{obj_Product.Link}}" class="rounded-md w-full" />
-            </div>
-            <div class="flex flex-col justify-center items-center w-full">
-                <label class="font-semibold">
-                    Iframe video
-                </label>
-                <input type="text" name="Iframe" value="{{obj_Product.Iframe}}" class="rounded-md w-full" />
-            </div>
-            <div class="flex justify-center items-center gap-1 bg-white p-2 rounded-md border-[1px] border-[#6b7280] w-full">
-                <div class="flex flex-col justify-center items-center">
-                    <label class="font-semibold">
-                        Video
-                    </label>
-                    <input type="file" class="rounded-md w-full" accept="video/*" name="Video" />
+                <div class="input-with-icon">
+                    <i class="fas fa-globe input-icon"></i>
+                    <input type="text" name="Link" value="{{obj_Product.Link}}" class="form-input"
+                        placeholder="https://example.com/video..." />
                 </div>
             </div>
-            <div class="flex gap-2  w-full justify-center overflow-x-auto">
-                {% if obj_Product.Avatar %}
-                <img alt="Avatar" class="h-[200px]" src="{{obj_Product.Avatar.url}}" />
-                {% endif %}
-                {% if obj_Product.Link %}
-                <!-- Ưu tiên Link -->
-                <video id="player" class="rounded-xl shadow-2xl h-[200px]" controls autoplay muted preload="metadata">
-                    <source src="{{ obj_Product.Link }}">
-                    Trình duyệt không hỗ trợ video.
-                </video>
-                {% elif obj_Product.Iframe %}
-                <!-- Ưu tiên Link -->
-                {{ obj_Product.Iframe|safe }}
-                {% elif obj_Product.Video %}
-                <!-- Nếu không có Link thì mới dùng Video upload -->
-                <video id="player" class="h-[200px] rounded-xl shadow-2xl" controls autoplay muted preload="metadata">
-                    <source src="{{ obj_Product.Video.url }}">
-                    Trình duyệt không hỗ trợ video.
-                </video>
-                {% endif %}
+
+            <!-- Iframe video -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-code"></i>
+                    Iframe video
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-brackets-curly input-icon"></i>
+                    <input type="text" name="Iframe" value="{{obj_Product.Iframe}}" class="form-input"
+                        placeholder="<iframe src='...'></iframe>" />
+                </div>
             </div>
-            <div class="text-[14px]">(*Video sẽ ưu tiên xuất hiện Link, Iframe, video Upaload theo thứ tự nhập*)</div>
-            <div class="flex items-center justify-between w-full">
-                <button type="submit"
-                class="rounded-md bg-green-500 font-semibold text-sm hover:cursor-pointer h-[40px] w-[100px]">Cập nhật</button>
-                <a href="{% url 'home' slug=obj_Product.Slug %}" 
-                        onclick="event.preventDefault(); copyHref(this);" 
-                        class="bg-sky-500 font-bold text-[14px] p-2 rounded flex justify-center items-center w-[100px]">
-                        Copy Link
+
+            <!-- Upload Video -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-film"></i>
+                    Upload Video mới
+                </label>
+                <div class="file-upload-wrapper">
+                    <label class="file-upload-label">
+                        <i class="fas fa-video file-upload-icon"></i>
+                        <div class="file-upload-text">
+                            <span>Click để chọn video mới</span> hoặc kéo thả
+                        </div>
+                    </label>
+                    <input type="file" class="file-upload-input" accept="video/*" name="Video" id="video-input" />
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="section-divider">
+                <span>Preview hiện tại</span>
+            </div>
+
+            <div class="preview-section">
+                <div class="preview-grid">
+                    {% if obj_Product.Avatar %}
+                    <img alt="Avatar" src="{{obj_Product.Avatar.url}}" />
+                    {% endif %}
+
+                    {% if obj_Product.Link %}
+                    <video controls muted preload="metadata">
+                        <source src="{{ obj_Product.Link }}">
+                        Trình duyệt không hỗ trợ video.
+                    </video>
+                    {% elif obj_Product.Iframe %}
+                    {{ obj_Product.Iframe|safe }}
+                    {% elif obj_Product.Video %}
+                    <video controls muted preload="metadata">
+                        <source src="{{ obj_Product.Video.url }}">
+                        Trình duyệt không hỗ trợ video.
+                    </video>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="form-actions">
+                <a href="{% url 'product_admin' %}" class="btn btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Quay lại
                 </a>
-                <a href="{% url 'home' slug=obj_Product.Slug %}" target="_blank" class="bg-green-500 font-bold text-[14px] p-2 rounded flex justify-center items-center w-[100px]">
-                        Xem Link
+                <button type="submit" class="btn btn-update">
+                    <i class="fas fa-save"></i>
+                    Cập nhật
+                </button>
+                <a href="{% url 'home' slug=obj_Product.Slug %}" onclick="event.preventDefault(); copyHref(this);"
+                    class="btn btn-copy">
+                    <i class="fas fa-copy"></i>
+                    <span>Copy Link</span>
                 </a>
-                <span 
-                class="flex justify-center items-center rounded-md bg-red-500 font-semibold text-sm hover:cursor-pointer h-[40px] w-[100px]"
-                onclick="if(confirm('Bạn có chắc muốn xoá?')) { 
-                    document.getElementById('delete-form').submit(); 
-                }"
-                >Xoá</span>
+                <a href="{% url 'home' slug=obj_Product.Slug %}" target="_blank" class="btn btn-view">
+                    <i class="fas fa-external-link-alt"></i>
+                    Xem Link
+                </a>
+                <span class="btn btn-delete" onclick="if(confirm('Bạn có chắc muốn xoá video này?')) { 
+                          document.getElementById('delete-form').submit(); 
+                      }">
+                    <i class="fas fa-trash-alt"></i>
+                    Xoá
+                </span>
             </div>
         </form>
+
         <!-- Form xoá ẩn (độc lập, không lồng) -->
-        <form id="delete-form" action="{% url 'product_remove_admin' pk=obj_Product.id %}" method="post" style="display:none;">
+        <form id="delete-form" action="{% url 'product_remove_admin' pk=obj_Product.id %}" method="post"
+            style="display:none;">
             {% csrf_token %}
         </form>
     </div>
 </div>
+
 <script>
-function copyHref(element) {
-    const link = element.getAttribute("href"); // lấy href
-    const fullUrl = window.location.origin + link; // ghép domain hiện tại
-    navigator.clipboard.writeText(fullUrl).then(() => {
-        alert("✅ Link đã copy: " + fullUrl);
-    }).catch(err => {
-        console.error("Lỗi copy link:", err);
+    // Show file name when selected
+    document.getElementById('avatar-input').addEventListener('change', function (e) {
+        const fileName = e.target.files[0]?.name;
+        if (fileName) {
+            this.previousElementSibling.querySelector('.file-upload-text').innerHTML =
+                '<span style="color: #10b981;"><i class="fas fa-check-circle"></i> ' + fileName + '</span>';
+        }
     });
-}
+
+    document.getElementById('video-input').addEventListener('change', function (e) {
+        const fileName = e.target.files[0]?.name;
+        if (fileName) {
+            this.previousElementSibling.querySelector('.file-upload-text').innerHTML =
+                '<span style="color: #10b981;"><i class="fas fa-check-circle"></i> ' + fileName + '</span>';
+        }
+    });
+
+    // Copy link function
+    function copyHref(element) {
+        const link = element.getAttribute("href");
+        const fullUrl = window.location.origin + link;
+        const btn = element;
+        const textSpan = btn.querySelector('span');
+        const icon = btn.querySelector('i');
+
+        navigator.clipboard.writeText(fullUrl).then(() => {
+            // Change button state
+            btn.classList.add('copied');
+            icon.classList.remove('fa-copy');
+            icon.classList.add('fa-check');
+            textSpan.textContent = 'Copied!';
+
+            // Reset after 2 seconds
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                icon.classList.remove('fa-check');
+                icon.classList.add('fa-copy');
+                textSpan.textContent = 'Copy Link';
+            }, 2000);
+        }).catch(err => {
+            console.error("Lỗi copy link:", err);
+        });
+    }
 </script>
 {% endblock %}

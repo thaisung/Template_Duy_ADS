@@ -1,7 +1,8 @@
 {% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="vi">
-    {% load static %}
+{% load static %}
+
 <head>
     {% tailwind_css %}
     <!-- 1. Thẻ charset, viewport, title -->
@@ -20,109 +21,472 @@
     <!-- 3. Favicon -->
     <link rel="shortcut icon" href="{{obj.Logo.url}}" type="image/x-icon" />
 
-    <!-- 4. Open Graph tags (Facebook, Zalo...) -->
+    <!-- 4. Open Graph tags -->
     <meta property="og:type" content="website">
-
     <meta property="og:title" content="Đăng nhập tài khoản">
     <meta property="og:description" content="">
     <meta property="og:image" content="{{obj.Logo.url}}">
-    <meta property="og:image:secure_url" content="{{obj.Logo.url}}">
     <meta property="og:url" content="{{domain}}/admin/login">
+    <meta property="og:site_name" content="Admin Portal">
 
-    <meta property="og:site_name" content="Cosbeauty">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-    <!-- 5. Phần còn lại -->
-
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
-
-    <link rel="stylesheet" href="/static/css/dist/styles.css?v=1743858420">
-    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <style>
-        @font-face {
-            font-family: 'UTM Aptima';
-            src: url('static/fonts/00022-UTM-Aptima.ttf') format('truetype');
-            font-weight: 400;
-            font-style: normal;
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: rgba(30, 41, 59, 0.9);
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --accent-success: #10b981;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(51, 65, 85, 0.5);
+            --glow-primary: rgba(59, 130, 246, 0.4);
+            --glow-secondary: rgba(139, 92, 246, 0.4);
         }
 
-        @font-face {
-            font-family: 'UTM Aptima';
-            src: url('static/fonts/00024-UTM-AptimaBoldItalic.ttf') format('truetype');
-            font-weight: 700;
-            font-style: italic;
-        }
-
-        @font-face {
-            font-family: 'UTM Bebas';
-            src: url('static/fonts/00041-UTM-Bebas.ttf') format('truetype');
-            font-weight: 700;
-            font-style: italic;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'UTM Aptima', sans-serif !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 0% 0%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 100% 100%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
+            z-index: -1;
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.3;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Login Card */
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow:
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 60px -15px var(--glow-primary);
+            animation: cardAppear 0.6s ease-out;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Logo */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .logo-container img {
+            max-height: 80px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Header */
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Form */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px var(--glow-primary);
+        }
+
+        .input-group input:focus+i,
+        .input-group:focus-within i {
+            color: var(--accent-primary);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--glow-primary);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .submit-btn i {
+            margin-right: 8px;
+        }
+
+        /* Loading state */
+        .submit-btn.loading {
+            pointer-events: none;
+        }
+
+        .submit-btn.loading .btn-text {
+            visibility: hidden;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* Error Message */
+        .error-message {
+            display: none;
+            padding: 12px 16px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            color: #f87171;
+            font-size: 0.9rem;
+            text-align: center;
+            animation: shake 0.5s ease;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        /* Footer */
+        .login-footer {
+            text-align: center;
+            margin-top: 24px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .login-footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .login-footer a:hover {
+            color: var(--accent-secondary);
         }
     </style>
-
 </head>
 
-<body class="w-full min-h-screen flex  items-center justify-center bg-red-500 p-3" style="background: url('/upload/website/background.png') no-repeat center center/cover;">
-    <div class="flex flex-col bg-white w-[500px] p-6 rounded-md gap-3">
-        <div class="flex justify-center items-center mb-3">
-            <img src="{{obj.Logo.url}}" class="rounded overflow-hidden" />
-        </div>
-        <div class="uppercase text-center bg-[#11284A] text-white p-3 font-bold rounded-md">
-            Đăng nhập trang quản trị
-        </div>
-        <form id="Login_Form" action="" class="flex flex-col gap-2">
-            {% csrf_token %}
-            <input name="username" placeholder="Tên tài khoản" class="rounded-md border-[1px] border-[#11284A]" />
-            <input name="password" type="password" placeholder="Mật khẩu" class="rounded-md border-[1px] border-[#11284A]" />
-            <button type="submit" class=" text-[#11284A] rounded-md py-2 font-bold border-[1px] border-[#11284A] ">Đăng nhập</button>
-        </form>
-        <script>
-            $(document).ready(function() {
-                $('#Login_Form').on('submit', function(event) {
-                    event.preventDefault();
-                    // $('#loader_login').show()
-                    // $('#Login_Form').hide()
-                
-                    var formData = new FormData(this);  // Tạo FormData từ form hiện tại
-                
-                    $.ajax({
-                        url: '{% url 'login_admin' %}',
-                        method: 'POST',
-                        // headers: {
-                        //     'X-CSRFToken': '{{ csrf_token }}'
-                        // },
-                        processData: false,  // Không xử lý dữ liệu (cần thiết khi sử dụng FormData)
-                        contentType: false,  // Không đặt kiểu content (cần thiết khi sử dụng FormData)
-                        data: formData,
-                        success: function(response) {
-                            if (response.success) {
-                                window.location.href = response.redirect_url;
-                            } else {
-                                // $('#loader_login').hide()
-                                // $('#Login_Form').show()
-                                alert(response.message);
-                            }
-                        },
-                        error: function(response) {
-                            console.log('Đăng nhập thất bại', response);
-                        }
-                    });
-                });
-                
-            });
-        </script>
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Floating Particles -->
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 1.5s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 4.5s;"></div>
     </div>
+
+    <div class="login-card">
+        <!-- <div class="logo-container">
+            <img src="{{obj.Logo.url}}" alt="Logo">
+        </div> -->
+
+        <div class="login-header">
+            <h1><i class="fas fa-shield-alt"></i> Admin ADS</h1>
+            <p>Đăng nhập để tiếp tục quản trị</p>
+        </div>
+
+        <form id="Login_Form" class="login-form">
+            {% csrf_token %}
+
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+            </div>
+
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Tên tài khoản" required>
+                <i class="fas fa-user"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Mật khẩu" required>
+                <i class="fas fa-lock"></i>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="btn-text"><i class="fas fa-sign-in-alt"></i> Đăng nhập</span>
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <p>© 2026 Admin Dashboard</p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#Login_Form').on('submit', function (event) {
+                event.preventDefault();
+
+                const btn = $('#submitBtn');
+                const errorBox = $('#errorMessage');
+                const errorText = $('#errorText');
+
+                // Hide previous error
+                errorBox.removeClass('show');
+
+                // Show loading
+                btn.addClass('loading');
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '{% url 'login_admin' %}',
+                    method: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (response) {
+                        btn.removeClass('loading');
+                        if (response.success) {
+                            // Success animation
+                            btn.html('<i class="fas fa-check"></i> Thành công!');
+                            btn.css('background', 'linear-gradient(135deg, #10b981, #059669)');
+                            setTimeout(() => {
+                                window.location.href = response.redirect_url;
+                            }, 500);
+                        } else {
+                            errorText.text(response.message);
+                            errorBox.addClass('show');
+                        }
+                    },
+                    error: function (response) {
+                        btn.removeClass('loading');
+                        errorText.text('Đã có lỗi xảy ra. Vui lòng thử lại.');
+                        errorBox.addClass('show');
+                        console.log('Đăng nhập thất bại', response);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

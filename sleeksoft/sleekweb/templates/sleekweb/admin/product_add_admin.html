@@ -1,128 +1,452 @@
 {% extends './base.html' %}
 {% block title %}Thêm Sản phẩm{% endblock %}
 {% block content %}
-<div class="w-full flex-col min-h-screen">
-    <div class="flex flex-col lg:flex-row items-center  lg:justify-between border-b-[1px] border-[#0e203c] lg:max-h-[50px] px-3 py-2 font-bold">
-        <span class="uppercase w-full flex justify-center lg:justify-start">
-            Trang Tạo Video
-        </span>
-        <div class="flex items-center gap-3 max-h-[60px] lg:max-h-none">
-            <div class="flex items-center justify-center rounded-full border-[1px] border-[#0e203c] px-2">
-                <input class="font-medium text-sm" placeholder="Tìm kiếm"
-                    style="border: none !important; outline: none !important; background: transparent;" />
-                <svg class="w-[25px]" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
-                    <g>
-                        <path
-                            d="M51.6,96.7c11,0,21-3.9,28.8-10.5l35,35c0.8,0.8,1.8,1.2,2.9,1.2s2.1-0.4,2.9-1.2c1.6-1.6,1.6-4.2,0-5.8l-35-35   c6.5-7.8,10.5-17.9,10.5-28.8c0-24.9-20.2-45.1-45.1-45.1C26.8,6.5,6.5,26.8,6.5,51.6C6.5,76.5,26.8,96.7,51.6,96.7z M51.6,14.7   c20.4,0,36.9,16.6,36.9,36.9C88.5,72,72,88.5,51.6,88.5c-20.4,0-36.9-16.6-36.9-36.9C14.7,31.3,31.3,14.7,51.6,14.7z">
-                        </path>
-                    </g>
-                </svg>
-            </div>
-            <a href="{% url 'product_add_admin' %}">
-                <svg class="w-[35px] fill-[#0e203c]" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="438.533px" height="438.533px"
-                    viewBox="0 0 438.533 438.533" style="enable-background:new 0 0 438.533 438.533;"
-                    xml:space="preserve">
-                    <g>
-                        <path d="M409.133,109.203c-19.608-33.592-46.205-60.189-79.798-79.796C295.736,9.801,259.058,0,219.273,0
-                            c-39.781,0-76.47,9.801-110.063,29.407c-33.595,19.604-60.192,46.201-79.8,79.796C9.801,142.8,0,179.489,0,219.267
-                            c0,39.78,9.804,76.463,29.407,110.062c19.607,33.592,46.204,60.189,79.799,79.798c33.597,19.605,70.283,29.407,110.063,29.407
-                            s76.47-9.802,110.065-29.407c33.593-19.602,60.189-46.206,79.795-79.798c19.603-33.596,29.403-70.284,29.403-110.062
-                            C438.533,179.485,428.732,142.795,409.133,109.203z M347.179,237.539c0,4.948-1.811,9.236-5.428,12.847
-                            c-3.62,3.614-7.901,5.428-12.847,5.428h-73.091v73.084c0,4.948-1.813,9.232-5.428,12.854c-3.613,3.613-7.897,5.421-12.847,5.421
-                            h-36.543c-4.948,0-9.231-1.808-12.847-5.421c-3.617-3.621-5.426-7.905-5.426-12.854v-73.084h-73.089
-                            c-4.948,0-9.229-1.813-12.847-5.428c-3.616-3.61-5.424-7.898-5.424-12.847v-36.547c0-4.948,1.809-9.231,5.424-12.847
-                            c3.617-3.617,7.898-5.426,12.847-5.426h73.092v-73.089c0-4.949,1.809-9.229,5.426-12.847c3.616-3.616,7.898-5.424,12.847-5.424
-                            h36.547c4.948,0,9.233,1.809,12.847,5.424c3.614,3.617,5.428,7.898,5.428,12.847v73.089h73.084c4.948,0,9.232,1.809,12.847,5.426
-                            c3.617,3.615,5.428,7.898,5.428,12.847V237.539z"></path>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                </svg>
-            </a>
-        </div>
-        <style>
-            input:focus {
-                outline: none !important;
-            }
-        </style>
+<style>
+    .product-add-container {
+        padding: 24px;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        margin-bottom: 32px;
+        text-align: center;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-title i {
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle {
+        color: var(--text-secondary, #94a3b8);
+        font-size: 0.95rem;
+    }
+
+    .form-card {
+        max-width: 650px;
+        margin: 0 auto;
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        padding: 32px;
+        box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.3),
+            0 0 40px rgba(59, 130, 246, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .form-card:hover {
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow:
+            0 8px 30px rgba(0, 0, 0, 0.4),
+            0 0 60px rgba(59, 130, 246, 0.15);
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary, #f1f5f9);
+        margin-bottom: 10px;
+    }
+
+    .form-label i {
+        color: var(--accent-primary, #3b82f6);
+        font-size: 1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .form-input,
+    .form-textarea {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(51, 65, 85, 0.6);
+        border-radius: 12px;
+        color: var(--text-primary, #f1f5f9);
+        font-size: 0.95rem;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .form-textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: var(--accent-primary, #3b82f6);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        background: rgba(15, 23, 42, 0.8);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+        color: var(--text-muted, #64748b);
+    }
+
+    /* File Upload Styling */
+    .file-upload-wrapper {
+        position: relative;
+        margin-bottom: 24px;
+    }
+
+    .file-upload-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(15, 23, 42, 0.5);
+        border: 2px dashed rgba(59, 130, 246, 0.4);
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .file-upload-label:hover {
+        border-color: rgba(59, 130, 246, 0.7);
+        background: rgba(15, 23, 42, 0.7);
+    }
+
+    .file-upload-icon {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .file-upload-text {
+        font-size: 0.95rem;
+        color: var(--text-secondary, #94a3b8);
+        text-align: center;
+    }
+
+    .file-upload-text span {
+        color: var(--accent-primary, #3b82f6);
+        font-weight: 600;
+    }
+
+    .file-upload-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Section Divider */
+    .section-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 32px 0;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+    }
+
+    .section-divider span {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-secondary, #94a3b8);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Priority Note */
+    .priority-note {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 18px;
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        border-radius: 12px;
+        margin-bottom: 24px;
+    }
+
+    .priority-note i {
+        color: #fbbf24;
+        font-size: 1.1rem;
+    }
+
+    .priority-note span {
+        font-size: 0.9rem;
+        color: var(--text-secondary, #94a3b8);
+        line-height: 1.5;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    .btn-submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 32px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 24px;
+        background: rgba(51, 65, 85, 0.5);
+        color: var(--text-secondary, #94a3b8);
+        border: 1px solid rgba(51, 65, 85, 0.6);
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-back:hover {
+        background: rgba(51, 65, 85, 0.7);
+        color: var(--text-primary, #f1f5f9);
+        border-color: rgba(71, 85, 105, 0.8);
+    }
+
+    /* Input Group with Icon */
+    .input-with-icon {
+        position: relative;
+    }
+
+    .input-with-icon .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted, #64748b);
+        font-size: 1rem;
+    }
+
+    .input-with-icon .form-input {
+        padding-left: 48px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .product-add-container {
+            padding: 16px;
+        }
+
+        .form-card {
+            padding: 24px 20px;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-submit,
+        .btn-back {
+            width: 100%;
+        }
+
+        .file-upload-label {
+            padding: 20px 16px;
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="product-add-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-video"></i>
+            Thêm Video Mới
+        </h1>
+        <p class="page-subtitle">Tạo video mới cho danh sách của bạn</p>
     </div>
-    <div class="flex justify-center  h-full">
-        <form method="post" action="{% url 'product_add_admin' %}" enctype="multipart/form-data" class="flex flex-col  items-center w-[500px] gap-3 pt-[20px]">
+
+    <div class="form-card">
+        <form method="post" action="{% url 'product_add_admin' %}" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="flex flex-col justify-center items-center w-full">
-                <label class="font-semibold">
+
+            <!-- Tiêu đề -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-heading"></i>
                     Tiêu đề
                 </label>
-                <input type="text" name="Title" class="rounded-md w-full" required />
+                <input type="text" name="Title" class="form-input" placeholder="Nhập tiêu đề video..." required />
             </div>
-            <div class="flex flex-col justify-center items-center w-full">
-                <label class="font-semibold">
+
+            <!-- Mô tả -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-align-left"></i>
                     Mô tả
                 </label>
-                <textarea class="rounded-md w-full h-[120px] p-3" name="Description" required></textarea>
+                <textarea class="form-textarea" name="Description" placeholder="Nhập mô tả video..."
+                    required></textarea>
             </div>
-            <div class="flex justify-center items-center gap-1 bg-white p-2 rounded-md border-[1px] border-[#6b7280] w-full">
-                <div class="flex flex-col justify-center items-center">
-                    <label class="font-semibold">
-                        Ảnh đại diện
+
+            <!-- Ảnh đại diện -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-image"></i>
+                    Ảnh đại diện
+                </label>
+                <div class="file-upload-wrapper">
+                    <label class="file-upload-label">
+                        <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                        <div class="file-upload-text">
+                            <span>Click để chọn ảnh</span> hoặc kéo thả vào đây
+                        </div>
                     </label>
-                    <input type="file" class="rounded-md w-full" accept="image/*" name="Avatar"  />
+                    <input type="file" class="file-upload-input" accept="image/*" name="Avatar" id="avatar-input" />
                 </div>
             </div>
-            <div class="flex flex-col justify-center items-center w-full">
-                <label class="font-semibold">
+
+            <div class="section-divider">
+                <span>Video Source</span>
+            </div>
+
+            <div class="priority-note">
+                <i class="fas fa-info-circle"></i>
+                <span>Video sẽ hiển thị theo thứ tự ưu tiên: <strong>Link → Iframe → Video Upload</strong></span>
+            </div>
+
+            <!-- Link video -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-link"></i>
                     Link video
                 </label>
-                <input type="text" name="Link" class="rounded-md w-full"  />
-            </div>
-            <div class="flex flex-col justify-center items-center w-full">
-                <label class="font-semibold">
-                    Iframe video
-                </label>
-                <input type="text" name="Iframe" class="rounded-md w-full"  />
-            </div>
-            <div class="flex justify-center items-center gap-1 bg-white p-2 rounded-md border-[1px] border-[#6b7280] w-full">
-                <div class="flex flex-col justify-center items-center">
-                    <label class="font-semibold">
-                        Video
-                    </label>
-                    <input type="file" class="rounded-md w-full" accept="video/*" name="Video"  />
+                <div class="input-with-icon">
+                    <i class="fas fa-globe input-icon"></i>
+                    <input type="text" name="Link" class="form-input" placeholder="https://example.com/video..." />
                 </div>
             </div>
-            <div class="text-[14px]">(*Video sẽ ưu tiên xuất hiện Link, Iframe, video Upaload theo thứ tự nhập*)</div>
-            <button type="submit"
-                class="p-2 rounded-md bg-green-500 font-semibold text-sm hover:cursor-pointer w-[100px]">Thêm</button>
+
+            <!-- Iframe video -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-code"></i>
+                    Iframe video
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-brackets-curly input-icon"></i>
+                    <input type="text" name="Iframe" class="form-input" placeholder="<iframe src='...'></iframe>" />
+                </div>
+            </div>
+
+            <!-- Upload Video -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-film"></i>
+                    Upload Video
+                </label>
+                <div class="file-upload-wrapper">
+                    <label class="file-upload-label">
+                        <i class="fas fa-video file-upload-icon"></i>
+                        <div class="file-upload-text">
+                            <span>Click để chọn video</span> hoặc kéo thả vào đây
+                        </div>
+                    </label>
+                    <input type="file" class="file-upload-input" accept="video/*" name="Video" id="video-input" />
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="form-actions">
+                <a href="{% url 'product_admin' %}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Quay lại
+                </a>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-plus"></i>
+                    Thêm Video
+                </button>
+            </div>
         </form>
     </div>
 </div>
+
+<script>
+    // Show file name when selected
+    document.getElementById('avatar-input').addEventListener('change', function (e) {
+        const fileName = e.target.files[0]?.name;
+        if (fileName) {
+            this.previousElementSibling.querySelector('.file-upload-text').innerHTML =
+                '<span style="color: #10b981;"><i class="fas fa-check-circle"></i> ' + fileName + '</span>';
+        }
+    });
+
+    document.getElementById('video-input').addEventListener('change', function (e) {
+        const fileName = e.target.files[0]?.name;
+        if (fileName) {
+            this.previousElementSibling.querySelector('.file-upload-text').innerHTML =
+                '<span style="color: #10b981;"><i class="fas fa-check-circle"></i> ' + fileName + '</span>';
+        }
+    });
+</script>
 {% endblock %}

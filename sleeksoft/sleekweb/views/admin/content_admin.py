@@ -64,126 +64,107 @@ import base64
 
 
     
-def product_admin(request):
+def content_admin(request):
     if request.method == 'GET':
         context = {}
         context['domain'] = settings.DOMAIN
         
-        # Lấy danh sách product, sắp xếp mới nhất trước
-        list_product = Product.objects.all().order_by('-id')
+        # Lấy danh sách content, sắp xếp mới nhất trước
+        list_content = Content.objects.all().order_by('-id')
         
         s = request.GET.get('s')
         if s:
-            list_product = list_product.filter(Q(Title__icontains=s))
+            list_content = list_content.filter(Q(content__icontains=s))
             context['s'] = s
         
         # Phân trang 15 bản ghi/trang
-        paginator = Paginator(list_product, 15)
+        paginator = Paginator(list_content, 15)
         page_number = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_number)
         
-        context['list_Product'] = page_obj
+        context['list_Content'] = page_obj
         context['page_obj'] = page_obj
-        context['product_pages'] = [
-            'product_admin',
-            'product_add_admin',
-            'product_edit_admin'
-        ]
+        context['content_pages'] = ['content_admin', 'content_add_admin', 'content_edit_admin']
+        
         if request.user.is_authenticated and request.user.is_superuser:
-            return render(request, 'sleekweb/admin/product_admin.html', context, status=200)
+            return render(request, 'sleekweb/admin/content_admin.html', context, status=200)
         else:
             return redirect('login_admin')
         
 
-def product_add_admin(request):
+def content_add_admin(request):
     if request.method == 'GET':
         context = {}
         context['domain'] = settings.DOMAIN
         # print('context:',context)
-        context['product_pages'] = [
-            'product_admin',
-            'product_add_admin',
-            'product_edit_admin'
-        ]
+        context['content_pages'] = [ 'content_admin', 'content_add_admin', 'content_edit_admin']
         if request.user.is_authenticated and request.user.is_superuser:
-            return render(request, 'sleekweb/admin/product_add_admin.html', context, status=200)
+            return render(request, 'sleekweb/admin/content_add_admin.html', context, status=200)
         else:
             return redirect('login_admin')
         
     elif request.method == 'POST':
         if request.user.is_authenticated and request.user.is_superuser:
             fields = {}
-            fields['Title'] = request.POST.get('Title')
-            fields['Description'] = request.POST.get('Description')
-            fields['Avatar']= request.FILES.get('Avatar')
-            fields['Link'] = request.POST.get('Link')
-            fields['Iframe'] = request.POST.get('Iframe')
-            fields['Video']= request.FILES.get('Video')
-            obj = Product.objects.create(**fields)
-            return redirect('product_admin')
+            fields['content'] = request.POST.get('content')
+            obj = Content.objects.create(**fields)
+            return redirect('content_admin')
         else:
             return redirect('login_admin')
     
-def product_edit_admin(request,pk):
+def content_edit_admin(request,pk):
     if request.method == 'GET':
         context = {}
         context['domain'] = settings.DOMAIN
-        context['obj_Product'] = Product.objects.get(pk=pk)
+        context['obj_Content'] = Content.objects.get(pk=pk)
         # print('context:',context)
-        context['product_pages'] = [
-            'product_admin',
-            'product_add_admin',
-            'product_edit_admin'
-        ]
+        context['content_pages'] = [ 'content_admin', 'content_add_admin', 'content_edit_admin']
         if request.user.is_authenticated and request.user.is_superuser:
-            return render(request, 'sleekweb/admin/product_edit_admin.html', context, status=200)
+            return render(request, 'sleekweb/admin/content_edit_admin.html', context, status=200)
         else:
             return redirect('login_admin')
     elif request.method == 'POST':
         if request.user.is_authenticated and request.user.is_superuser:
             fields = {}
-            fields['Title'] = request.POST.get('Title')
-            fields['Description'] = request.POST.get('Description')
-            fields['Avatar']= request.FILES.get('Avatar')
-            fields['Link'] = request.POST.get('Link')
-            fields['Iframe'] = request.POST.get('Iframe')
-            fields['Video']= request.FILES.get('Video')
+            fields['content'] = request.POST.get('content')
 
-            obj = Product.objects.get(pk=pk)
-            obj.Title = fields['Title']
-            obj.Description = fields['Description']
-            obj.Link = fields['Link']
-            obj.Iframe = fields['Iframe']
-            if fields['Avatar']:
-                if obj.Avatar:   # nếu đã có file cũ
-                    obj.Avatar.delete(save=False)  # xoá file cũ trong media
-                obj.Avatar = fields['Avatar']
-
-            if fields['Video']:
-                if obj.Video:
-                    obj.Video.delete(save=False)
-                obj.Video = fields['Video']
+            obj = Content.objects.get(pk=pk)
+            obj.Title = fields['content']
 
             obj.save()
-            return redirect('product_edit_admin',pk=pk)
+            return redirect('content_edit_admin',pk=pk)
         else:
             return redirect('login_admin')
     
-def product_remove_admin(request,pk):
+def content_remove_admin(request,pk):
     if request.user.is_authenticated and request.user.is_superuser:
         if request.method == 'POST':
             try:
-                obj = Product.objects.get(pk=pk)
-                # Xoá Avatar file nếu tồn tại
-                if obj.Avatar:   # nếu đã có file cũ
-                    obj.Avatar.delete(save=False)  # xoá file cũ trong media
-                if obj.Video:
-                    obj.Video.delete(save=False)
+                obj = Content.objects.get(pk=pk)
                 obj.delete()
             except:
                 print('not')
-            return redirect('product_admin')
+            return redirect('content_admin')
     else:
         return redirect('login_admin')
         
+def copy_log(request):
+    if request.method == 'POST':
+        content_id = request.POST.get("content_id")
+        log = CopyLog.objects.create(content_id=content_id)
+        # Trả về content_id và copied_at để frontend cập nhật giao diện
+        return JsonResponse({
+            "status": "ok",
+            "content_id": content_id,
+            "copied_at": log.copied_at.strftime("%d/%m/%Y %H:%M:%S")
+        })
 
+def get_copy_logs(request):
+    """API để frontend polling lấy danh sách copy logs"""
+    if request.method == 'GET':
+        contents = Content.objects.all()
+        data = {}
+        for content in contents:
+            logs = content.copy_logs.all().order_by('-copied_at')[:20]  # Lấy 20 bản ghi mới nhất
+            data[content.id] = [log.copied_at.strftime("%d/%m/%Y %H:%M:%S") for log in logs]
+        return JsonResponse({"copy_logs": data})

@@ -1,89 +1,344 @@
 {% extends './base.html' %}
-{% block title %}Quản lý Sản phẩm{% endblock %}
+{% block title %}Quản lý ADS{% endblock %}
 {% block content %}
-<div class="w-full flex-col ">
-    <div class="flex flex-col lg:flex-row items-center  lg:justify-between border-b-[1px] border-[#0e203c] lg:max-h-[50px] px-3 py-2 font-bold">
-        <span class="uppercase w-full flex justify-center lg:justify-start">
-            Trang ADS
-        </span>
-        <style>
-            input:focus {
-                outline: none !important;
-            }
-        </style>
+<style>
+    .ads-container {
+        padding: 24px;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        margin-bottom: 32px;
+        text-align: center;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-title i {
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .ads-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .ads-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(20px);
+        border-radius: 16px;
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        padding: 24px;
+        transition: all 0.3s ease;
+    }
+
+    .ads-card:hover {
+        border-color: rgba(245, 158, 11, 0.3);
+        box-shadow:
+            0 8px 30px rgba(0, 0, 0, 0.3),
+            0 0 40px rgba(245, 158, 11, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .ads-card.special {
+        grid-column: 1 / -1;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.15));
+        border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .ads-card.special:hover {
+        border-color: rgba(139, 92, 246, 0.5);
+        box-shadow:
+            0 8px 30px rgba(0, 0, 0, 0.3),
+            0 0 40px rgba(139, 92, 246, 0.2);
+    }
+
+    .ads-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .ads-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: white;
+    }
+
+    .ads-icon.top {
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    }
+
+    .ads-icon.bottom {
+        background: linear-gradient(135deg, #10b981, #06b6d4);
+    }
+
+    .ads-icon.left {
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+    }
+
+    .ads-icon.right {
+        background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    }
+
+    .ads-icon.special {
+        background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    }
+
+    .ads-label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .ads-position {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+    }
+
+    .ads-input-group {
+        display: flex;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .ads-input {
+        flex: 1;
+        padding: 14px 16px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(51, 65, 85, 0.6);
+        border-radius: 10px;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        font-family: 'Inter', monospace;
+        transition: all 0.3s ease;
+    }
+
+    .ads-input:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        background: rgba(15, 23, 42, 0.8);
+    }
+
+    .ads-input::placeholder {
+        color: var(--text-muted);
+    }
+
+    .btn-update {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 14px 20px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+
+    .btn-update:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-update:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 640px) {
+        .ads-container {
+            padding: 16px;
+        }
+
+        .ads-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .ads-input-group {
+            flex-direction: column;
+        }
+
+        .btn-update {
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="ads-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-ad"></i>
+            Quản Lý Quảng Cáo
+        </h1>
+        <p class="page-subtitle">Cấu hình vị trí hiển thị quảng cáo trên trang web</p>
     </div>
-    <div class="flex flex-col gap-3 p-3">
-        <form action="{% url 'ads_edit_admin' %}" method="post" class="flex flex-col gap-1">
-            {% csrf_token %}
-            <label class="font-semibold">
-                1.Vị trí quảng cáo TRÊN
-            </label>
-            <div class="flex items-center gap-2">
-                <input type="text" name="Script" value="{{Ads_1.Script}}" class="rounded-md w-full" required />
-                <input type="text" name="Count" value="1" class="hidden rounded-md w-full" required />
-                <button type="submit"
-                    class="p-2 rounded-md bg-green-500 font-semibold text-sm hover:cursor-pointer w-[100px]">Cập nhật</button>
 
-            </div>
-        </form>
-        <form action="{% url 'ads_edit_admin' %}" method="post" class="flex flex-col gap-1">
-            {% csrf_token %}
-            <label class="font-semibold">
-                2.Vị trí quảng cáo DƯỚI
-            </label>
-            <div class="flex items-center gap-2">
-                <input type="text" name="Script" value="{{Ads_2.Script}}" class="rounded-md w-full" required />
-                <input type="text" name="Count" value="2" class="hidden rounded-md w-full" required />
-                <button type="submit"
-                    class="p-2 rounded-md bg-green-500 font-semibold text-sm hover:cursor-pointer w-[100px]">Cập nhật</button>
+    <div class="ads-grid">
+        <!-- ADS 1: TRÊN -->
+        <div class="ads-card">
+            <form action="{% url 'ads_edit_admin' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="Count" value="1" />
+                <div class="ads-card-header">
+                    <div class="ads-icon top">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div>
+                        <div class="ads-label">Vị trí TRÊN</div>
+                        <div class="ads-position">Hiển thị phía trên nội dung</div>
+                    </div>
+                </div>
+                <div class="ads-input-group">
+                    <input type="text" name="Script" value="{{Ads_1.Script}}" class="ads-input"
+                        placeholder="Nhập script quảng cáo..." required />
+                    <button type="submit" class="btn-update">
+                        <i class="fas fa-save"></i> Lưu
+                    </button>
+                </div>
+            </form>
+        </div>
 
-            </div>
-        </form>
-        <form action="{% url 'ads_edit_admin' %}" method="post" class="flex flex-col gap-1">
-            {% csrf_token %}
-            <label class="font-semibold">
-                3.Vị trí quảng cáo TRÁI
-            </label>
-            <div class="flex items-center gap-2">
-                <input type="text" name="Script" value="{{Ads_3.Script}}" class="rounded-md w-full" required />
-                <input type="text" name="Count" value="3" class="hidden rounded-md w-full" required />
-                <button type="submit"
-                    class="p-2 rounded-md bg-green-500 font-semibold text-sm hover:cursor-pointer w-[100px]">Cập nhật</button>
+        <!-- ADS 2: DƯỚI -->
+        <div class="ads-card">
+            <form action="{% url 'ads_edit_admin' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="Count" value="2" />
+                <div class="ads-card-header">
+                    <div class="ads-icon bottom">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div>
+                        <div class="ads-label">Vị trí DƯỚI</div>
+                        <div class="ads-position">Hiển thị phía dưới nội dung</div>
+                    </div>
+                </div>
+                <div class="ads-input-group">
+                    <input type="text" name="Script" value="{{Ads_2.Script}}" class="ads-input"
+                        placeholder="Nhập script quảng cáo..." required />
+                    <button type="submit" class="btn-update">
+                        <i class="fas fa-save"></i> Lưu
+                    </button>
+                </div>
+            </form>
+        </div>
 
-            </div>
-        </form>
-        <form action="{% url 'ads_edit_admin' %}" method="post" class="flex flex-col gap-1">
-            {% csrf_token %}
-            <label class="font-semibold">
-                4.Vị trí quảng cáo PHẢI
-            </label>
-            <div class="flex items-center gap-2">
-                <input type="text" name="Script" value="{{Ads_4.Script}}" class="rounded-md w-full" required />
-                <input type="text" name="Count" value="4" class="hidden rounded-md w-full" required />
-                <button type="submit"
-                    class="p-2 rounded-md bg-green-500 font-semibold text-sm hover:cursor-pointer w-[100px]">Cập nhật</button>
+        <!-- ADS 3: TRÁI -->
+        <div class="ads-card">
+            <form action="{% url 'ads_edit_admin' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="Count" value="3" />
+                <div class="ads-card-header">
+                    <div class="ads-icon left">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <div>
+                        <div class="ads-label">Vị trí TRÁI</div>
+                        <div class="ads-position">Hiển thị bên trái màn hình</div>
+                    </div>
+                </div>
+                <div class="ads-input-group">
+                    <input type="text" name="Script" value="{{Ads_3.Script}}" class="ads-input"
+                        placeholder="Nhập script quảng cáo..." required />
+                    <button type="submit" class="btn-update">
+                        <i class="fas fa-save"></i> Lưu
+                    </button>
+                </div>
+            </form>
+        </div>
 
-            </div>
-        </form>
-        <form action="{% url 'ads_edit_admin' %}" method="post" class="flex flex-col gap-1">
-            {% csrf_token %}
-            <label class="font-semibold">
-                * Link quảng cáo khi bấm nút TIẾP TỤC XEM VIDEO *
-            </label>
-            <div class="flex items-center gap-2">
-                <input type="text" name="Script" value="{{Ads_100.Script}}" class="rounded-md w-full" required />
-                <input type="text" name="Count" value="100" class="hidden rounded-md w-full" required />
-                <button type="submit"
-                    class="p-2 rounded-md bg-green-500 font-semibold text-sm hover:cursor-pointer w-[100px]">Cập nhật</button>
+        <!-- ADS 4: PHẢI -->
+        <div class="ads-card">
+            <form action="{% url 'ads_edit_admin' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="Count" value="4" />
+                <div class="ads-card-header">
+                    <div class="ads-icon right">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div>
+                        <div class="ads-label">Vị trí PHẢI</div>
+                        <div class="ads-position">Hiển thị bên phải màn hình</div>
+                    </div>
+                </div>
+                <div class="ads-input-group">
+                    <input type="text" name="Script" value="{{Ads_4.Script}}" class="ads-input"
+                        placeholder="Nhập script quảng cáo..." required />
+                    <button type="submit" class="btn-update">
+                        <i class="fas fa-save"></i> Lưu
+                    </button>
+                </div>
+            </form>
+        </div>
 
-            </div>
-        </form>
+        <!-- ADS 100: TIẾP TỤC XEM VIDEO -->
+        <div class="ads-card special">
+            <form action="{% url 'ads_edit_admin' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="Count" value="100" />
+                <div class="ads-card-header">
+                    <div class="ads-icon special">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <div>
+                        <div class="ads-label">Link Nút "Tiếp Tục Xem Video"</div>
+                        <div class="ads-position">Quảng cáo hiển thị khi người dùng bấm nút tiếp tục</div>
+                    </div>
+                </div>
+                <div class="ads-input-group">
+                    <input type="text" name="Script" value="{{Ads_100.Script}}" class="ads-input"
+                        placeholder="Nhập link quảng cáo..." required />
+                    <button type="submit" class="btn-update">
+                        <i class="fas fa-save"></i> Lưu
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
 <script>
-    $(document).ready(function() {
-        $('.open_input_Size').on('click', function() {
-            $('.input_Size').toggle(); // Bật nếu ẩn, ẩn nếu bật
+    $(document).ready(function () {
+        $('.open_input_Size').on('click', function () {
+            $('.input_Size').toggle();
         });
     });
 </script>
