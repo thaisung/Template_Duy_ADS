@@ -100,7 +100,7 @@ def content_detail_client(request, slug):
         
         # Lấy tất cả lines và phân trang 50 dòng/trang
         all_lines = content_obj.lines.all().order_by('order')
-        paginator = Paginator(all_lines, 50)
+        paginator = Paginator(all_lines, 100)
         page_number = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_number)
         

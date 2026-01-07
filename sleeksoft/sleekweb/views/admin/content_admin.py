@@ -79,7 +79,7 @@ def content_admin(request):
             context['s'] = s
         
         # Phân trang 15 bản ghi/trang
-        paginator = Paginator(list_content, 20)
+        paginator = Paginator(list_content, 100)
         page_number = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_number)
         
