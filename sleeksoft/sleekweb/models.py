@@ -76,11 +76,47 @@ class Ads(models.Model):
     Update_time = models.DateTimeField('Thời gian cập nhật',auto_now=True)
 
 class Content(models.Model):
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    title = models.CharField('Tiêu đề', max_length=255, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+    created_at = models.DateTimeField('Thời gian tạo', auto_now_add=True)
+
+    class Meta:
+        ordering = ["-id"]
+        verbose_name_plural = "Nội dung"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            import uuid
+            self.slug = str(uuid.uuid4())[:8]
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Content {self.id}"
+        return self.title or f"Content {self.id}"
+
+    def get_full_content(self):
+        """Trả về nội dung đầy đủ từ các dòng"""
+        return '\n'.join([line.line for line in self.lines.all().order_by('order')])
+
+
+class ContentLine(models.Model):
+    content = models.ForeignKey(
+        Content,
+        on_delete=models.CASCADE,
+        related_name="lines",
+        db_index=True
+    )
+    line = models.TextField('Nội dung dòng')
+    order = models.IntegerField('Thứ tự', default=0)
+
+    class Meta:
+        ordering = ["order"]
+        indexes = [
+            models.Index(fields=["content", "order"]),
+        ]
+
+    def __str__(self):
+        return f"Line {self.order} of Content {self.content_id}"
+
 
 class CopyLog(models.Model):
     content = models.ForeignKey(
@@ -89,11 +125,19 @@ class CopyLog(models.Model):
         related_name="copy_logs",
         db_index=True
     )
+    content_line = models.ForeignKey(
+        ContentLine,
+        on_delete=models.CASCADE,
+        related_name="copy_logs",
+        db_index=True,
+        null=True,
+        blank=True
+    )
     copied_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["-copied_at"]
         indexes = [
             models.Index(fields=["content", "copied_at"]),
+            models.Index(fields=["content_line", "copied_at"]),
         ]
-

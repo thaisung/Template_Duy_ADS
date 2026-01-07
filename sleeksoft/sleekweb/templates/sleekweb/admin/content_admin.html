@@ -153,9 +153,20 @@
         backdrop-filter: blur(10px);
     }
 
+    .total-badge {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.7em;
+        margin-left: 10px;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        display: inline-block;
+    }
+
     .table-header {
         display: grid;
-        grid-template-columns: 2fr 1fr 1.5fr 1fr;
+        grid-template-columns: 1fr 2fr 0.5fr 0.5fr 1.5fr;
         gap: 16px;
         padding: 16px 20px;
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
@@ -172,12 +183,116 @@
 
     .table-row {
         display: grid;
-        grid-template-columns: 2fr 1fr 1.5fr 1fr;
+        grid-template-columns: 1fr 2fr 0.5fr 0.5fr 1.5fr;
         gap: 16px;
         padding: 16px 20px;
         align-items: center;
         border-bottom: 1px solid var(--border-color);
         transition: all 0.3s ease;
+    }
+
+    .mobile-label {
+        display: none;
+    }
+
+    .stats-row {
+        display: contents;
+    }
+
+    @media (max-width: 768px) {
+        .table-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mobile-label {
+            display: inline;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 10px;
+        }
+    }
+
+    .copy-link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .copy-link-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+
+    .copy-link-btn.copied {
+        background: linear-gradient(135deg, var(--accent-success), #059669);
+    }
+
+    .view-link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .view-link-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    }
+
+    .content-preview {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        max-height: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .content-title {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+    }
+
+    .link-display {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        word-break: break-all;
+    }
+
+    .link-text {
+        color: var(--accent-primary);
+    }
+
+    .link-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
     }
 
     .table-row:hover {
@@ -396,17 +511,17 @@
 
 <div class="content-container">
     <div class="page-header">
-        <h1 class="page-title"><i class="fas fa-file-alt"></i> Trang Nội dung</h1>
+        <h1 class="page-title">
+            <i class="fas fa-file-alt"></i> Trang Nội dung Người dùng
+            <span class="total-badge">{{ total_links }} link</span>
+        </h1>
         <div class="header-actions">
             <form class="search-box">
-                <input type="text" name="s" value="{{ s }}" placeholder="Tìm kiếm nội dung...">
+                <input type="text" name="s" value="{{ s }}" placeholder="Tìm kiếm người dùng...">
                 <button type="submit"><i class="fas fa-search"></i></button>
             </form>
             <a href="{% url 'content_add_admin' %}" class="add-btn">
                 <i class="fas fa-plus"></i> Thêm mới
-            </a>
-            <a href="{% url 'content_client' %}" target="_blank" class="view-page-btn">
-                <i class="fas fa-external-link-alt"></i> Xem trang
             </a>
         </div>
     </div>
@@ -415,28 +530,40 @@
 
     <div class="table-container">
         <div class="table-header">
-            <div>Nội dung</div>
-            <div>Copy</div>
-            <div>Thời gian Copy</div>
+            <div>Người dùng</div>
+            <div>Link trang</div>
+            <div>Số dòng</div>
+            <div>Lượt copy</div>
             <div>Hành động</div>
         </div>
 
         {% for i in list_Content %}
         <div class="table-row">
-            <div class="content-text max-h-[200px] overflow-y-auto" id="content-{{ i.id }}">{{ i.content }}</div>
             <div>
-                <button class="copy-btn" data-id="{{ i.id }}" data-content="{{ i.content|escapejs }}">
+                <div class="content-title">{{ i.title|default:"Không có tiêu đề" }}</div>
+            </div>
+            <div class="link-display">
+                <span class="link-text" id="link-text-{{ i.id }}">{{ domain }}/content/{{ i.slug }}/</span>
+            </div>
+            <div class="stats-row">
+                <div class="line-count">
+                    <span
+                        style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); padding: 6px 12px; border-radius: 20px; font-weight: 600;"><span
+                            class="mobile-label">Số dòng: </span>{{ i.lines.count }}</span>
+                </div>
+                <div class="copy-count">
+                    <span
+                        style="background: linear-gradient(135deg, #10b981, #059669); padding: 6px 12px; border-radius: 20px; font-weight: 600;"><span
+                            class="mobile-label">Lượt copy: </span>{{ i.copy_logs.count }}</span>
+                </div>
+            </div>
+            <div class="link-actions">
+                <button class="copy-link-btn" data-link="{{ domain }}/content/{{ i.slug }}/">
                     <i class="fas fa-copy"></i> <span>Copy</span>
                 </button>
-            </div>
-            <div class="copy-logs" id="copy-times-{{ i.id }}">
-                {% for log in i.copy_logs.all %}
-                <div class="copy-log-item">{{ log.copied_at|date:"d/m/Y H:i:s" }}</div>
-                {% empty %}
-                <div class="no-logs">Chưa có lần copy nào</div>
-                {% endfor %}
-            </div>
-            <div>
+                <a href="{% url 'content_detail_client' slug=i.slug %}" target="_blank" class="view-link-btn">
+                    <i class="fas fa-external-link-alt"></i> Truy cập
+                </a>
                 <form method="post" action="{% url 'content_remove_admin' pk=i.id %}" style="display: inline;"
                     onsubmit="return confirm('Bạn có chắc chắn muốn xoá bản ghi này không?');">
                     {% csrf_token %}
@@ -449,8 +576,9 @@
         {% empty %}
         <div class="empty-state">
             <i class="fas fa-inbox"></i>
-            <h3>Không có nội dung nào</h3>
-            <p>Bấm "Thêm mới" để tạo nội dung đầu tiên</p>
+            <h3>Chưa có Nội dung Người dùng nào</h3>
+            <p><a href="{% url 'content_add_admin' %}"
+                    style="color: var(--accent-primary); text-decoration: underline;">Bấm để thêm mới</a></p>
         </div>
         {% endfor %}
         {% if list_Content %}
@@ -560,44 +688,25 @@
 </script> -->
 
 <script>
-    // Copy functionality
-    $(document).on("click", ".copy-btn", function () {
+    // Copy Link functionality
+    $(document).on("click", ".copy-link-btn", function () {
         const btn = $(this);
-        const contentId = btn.data("id");
+        const link = btn.data("link");
 
-        // 🔥 COPY TỪ DOM (GIỮ XUỐNG DÒNG, DÁN YOUTUBE CHUẨN)
-        const content = document.getElementById("content-" + contentId).innerText;
-
-        navigator.clipboard.writeText(content).then(() => {
+        navigator.clipboard.writeText(link).then(() => {
             // Show toast
             const toast = $('#toast');
+            toast.text('✅ Đã copy link thành công!');
             toast.addClass('show');
             setTimeout(() => toast.removeClass('show'), 2000);
 
             // Change button state
             btn.addClass('copied');
-            btn.find('span').text('Copied!');
+            btn.find('span').text('Đã Copy!');
             setTimeout(() => {
                 btn.removeClass('copied');
-                btn.find('span').text('Copy');
+                btn.find('span').text('Copy Link');
             }, 2000);
-        });
-
-        // Send to server
-        $.ajax({
-            url: "{% url 'copy_log' %}",
-            method: "POST",
-            data: {
-                content_id: contentId,
-                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-            },
-            success: function (res) {
-                const container = $("#copy-times-" + res.content_id);
-                container.find(".no-logs").remove();
-                container.prepend(
-                    `<div class="copy-log-item new">${res.copied_at}</div>`
-                );
-            }
         });
     });
 
@@ -612,7 +721,7 @@
                     container.empty();
 
                     if (logs.length === 0) {
-                        container.append('<div class="no-logs">Chưa có lần copy nào</div>');
+                        container.append('<div class="no-logs">Chưa có</div>');
                     } else {
                         logs.forEach(function (time) {
                             container.append(`<div class="copy-log-item">${time}</div>`);

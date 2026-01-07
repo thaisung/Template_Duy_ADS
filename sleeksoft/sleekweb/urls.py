@@ -104,6 +104,7 @@ urlpatterns = [
     path("get-copy-logs/", get_copy_logs, name="get_copy_logs"),
 
     path('content/', content_client, name='content_client'),
+    path('content/<slug:slug>/', content_detail_client, name='content_detail_client'),
 
 
 

@@ -1,0 +1,389 @@
+{% extends './base.html' %}
+{% block title %}Quản lý Nội Dung - {{ obj_Content.title|default:"Content" }}{% endblock %}
+{% block content %}
+<style>
+    .content-edit-container {
+        padding: 24px;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        margin-bottom: 32px;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-subtitle {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .content-info-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(20px);
+        border-radius: 16px;
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--text-secondary);
+        min-width: 100px;
+    }
+
+    .info-value {
+        color: var(--text-primary);
+    }
+
+    .client-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(59, 130, 246, 0.1);
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .client-link-text {
+        flex: 1;
+        color: var(--accent-primary);
+        word-break: break-all;
+    }
+
+    .copy-link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .copy-link-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+
+    .copy-link-btn.copied {
+        background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .view-link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .view-link-btn:hover {
+        transform: scale(1.05);
+    }
+
+    .form-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        padding: 32px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 10px;
+    }
+
+    .form-label i {
+        color: var(--accent-primary);
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(51, 65, 85, 0.6);
+        border-radius: 12px;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .form-textarea {
+        width: 100%;
+        min-height: 400px;
+        padding: 16px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(51, 65, 85, 0.6);
+        border-radius: 12px;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        font-family: 'Inter', monospace;
+        resize: vertical;
+        transition: all 0.3s ease;
+    }
+
+    .form-textarea:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn-submit {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 28px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 24px;
+        background: rgba(51, 65, 85, 0.5);
+        color: var(--text-secondary);
+        border: 1px solid rgba(51, 65, 85, 0.6);
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+        background: rgba(51, 65, 85, 0.7);
+        color: var(--text-primary);
+    }
+
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(239, 68, 68, 0.4);
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        padding: 16px 24px;
+        border-radius: 12px;
+        font-weight: 500;
+        box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    @media (max-width: 640px) {
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-group {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .btn-submit,
+        .btn-back,
+        .btn-delete {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="content-edit-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-edit"></i>
+            Quản lý Nội Dung
+        </h1>
+        <p class="page-subtitle">Chỉnh sửa nội dung và quản lý link client</p>
+    </div>
+
+    <!-- Info Card with Client Link -->
+    <div class="content-info-card">
+        <div class="info-row">
+            <span class="info-label"><i class="fas fa-calendar"></i> Ngày tạo:</span>
+            <span class="info-value">{{ obj_Content.created_at|date:"d/m/Y H:i" }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><i class="fas fa-link"></i> Link Client:</span>
+        </div>
+        <div class="client-link">
+            <span class="client-link-text" id="client-link">{{ domain }}content/{{ obj_Content.slug }}/</span>
+            <button class="copy-link-btn" id="copy-link-btn">
+                <i class="fas fa-copy"></i> <span>Copy</span>
+            </button>
+            <a href="{% url 'content_detail_client' slug=obj_Content.slug %}" target="_blank" class="view-link-btn">
+                <i class="fas fa-external-link-alt"></i> Mở trang
+            </a>
+        </div>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="form-card">
+        <form method="post" action="{% url 'content_edit_admin' pk=obj_Content.id %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-heading"></i>
+                    Tiêu Đề
+                </label>
+                <input type="text" class="form-input" name="title" value="{{ obj_Content.title|default:'' }}"
+                    placeholder="Nhập tiêu đề...">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-align-left"></i>
+                    Nội Dung (mỗi dòng được lưu riêng)
+                </label>
+                <textarea class="form-textarea" name="content"
+                    placeholder="Nhập nội dung...">{{ content_text }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <div class="btn-group">
+                    <a href="{% url 'content_admin' %}" class="btn-back">
+                        <i class="fas fa-arrow-left"></i> Quay lại
+                    </a>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> Lưu thay đổi
+                    </button>
+                </div>
+                <form method="post" action="{% url 'content_remove_admin' pk=obj_Content.id %}"
+                    onsubmit="return confirm('Bạn có chắc chắn muốn xoá nội dung này không?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete">
+                        <i class="fas fa-trash"></i> Xoá
+                    </button>
+                </form>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">✅ Đã copy link thành công!</div>
+
+<script>
+    $('#copy-link-btn').on('click', function () {
+        const btn = $(this);
+        const link = $('#client-link').text();
+
+        navigator.clipboard.writeText(link).then(() => {
+            const toast = $('#toast');
+            toast.addClass('show');
+            setTimeout(() => toast.removeClass('show'), 2000);
+
+            btn.addClass('copied');
+            btn.find('span').text('Đã Copy!');
+            setTimeout(() => {
+                btn.removeClass('copied');
+                btn.find('span').text('Copy');
+            }, 2000);
+        });
+    });
+</script>
+{% endblock %}

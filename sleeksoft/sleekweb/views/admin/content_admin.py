@@ -75,16 +75,17 @@ def content_admin(request):
         
         s = request.GET.get('s')
         if s:
-            list_content = list_content.filter(Q(content__icontains=s))
+            list_content = list_content.filter(Q(title__icontains=s))
             context['s'] = s
         
         # Phân trang 15 bản ghi/trang
-        paginator = Paginator(list_content, 15)
+        paginator = Paginator(list_content, 20)
         page_number = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_number)
         
         context['list_Content'] = page_obj
         context['page_obj'] = page_obj
+        context['total_links'] = Content.objects.count()
         context['content_pages'] = ['content_admin', 'content_add_admin', 'content_edit_admin']
         
         if request.user.is_authenticated and request.user.is_superuser:
@@ -106,17 +107,24 @@ def content_add_admin(request):
         
     elif request.method == 'POST':
         if request.user.is_authenticated and request.user.is_superuser:
-            fields = {}
-            content = request.POST.get('content', '')
-            content = content.strip()
+            content_text = request.POST.get('content', '')
+            title = request.POST.get('title', '').strip()
+            content_text = content_text.strip()
 
-            lines = content.splitlines()  # tự xử lý \n, \r\n
-            print("lines:",lines)
-            for line in lines:
+            # Tạo Content mới với title
+            content_obj = Content.objects.create(title=title if title else None)
+            
+            # Tách từng dòng và tạo ContentLine
+            lines = content_text.splitlines()
+            for idx, line in enumerate(lines):
                 line = line.strip()
                 if line:  # bỏ dòng trống
-                    fields['content'] = line
-                    obj = Content.objects.create(**fields)
+                    ContentLine.objects.create(
+                        content=content_obj,
+                        line=line,
+                        order=idx
+                    )
+            
             return redirect('content_admin')
         else:
             return redirect('login_admin')
@@ -125,8 +133,10 @@ def content_edit_admin(request,pk):
     if request.method == 'GET':
         context = {}
         context['domain'] = settings.DOMAIN
-        context['obj_Content'] = Content.objects.get(pk=pk)
-        # print('context:',context)
+        content_obj = Content.objects.get(pk=pk)
+        context['obj_Content'] = content_obj
+        # Ghép các dòng thành text để hiển thị trong textarea
+        context['content_text'] = content_obj.get_full_content()
         context['content_pages'] = [ 'content_admin', 'content_add_admin', 'content_edit_admin']
         if request.user.is_authenticated and request.user.is_superuser:
             return render(request, 'sleekweb/admin/content_edit_admin.html', context, status=200)
@@ -134,13 +144,26 @@ def content_edit_admin(request,pk):
             return redirect('login_admin')
     elif request.method == 'POST':
         if request.user.is_authenticated and request.user.is_superuser:
-            fields = {}
-            fields['content'] = request.POST.get('content')
-
-            obj = Content.objects.get(pk=pk)
-            obj.Title = fields['content']
-
-            obj.save()
+            content_text = request.POST.get('content', '')
+            title = request.POST.get('title', '').strip()
+            
+            content_obj = Content.objects.get(pk=pk)
+            content_obj.title = title if title else None
+            content_obj.save()
+            
+            # Xóa các dòng cũ và tạo mới
+            content_obj.lines.all().delete()
+            
+            lines = content_text.strip().splitlines()
+            for idx, line in enumerate(lines):
+                line = line.strip()
+                if line:
+                    ContentLine.objects.create(
+                        content=content_obj,
+                        line=line,
+                        order=idx
+                    )
+            
             return redirect('content_edit_admin',pk=pk)
         else:
             return redirect('login_admin')
@@ -172,20 +195,28 @@ def content_remove_all_admin(request):
 def copy_log(request):
     if request.method == 'POST':
         content_id = request.POST.get("content_id")
-        log = CopyLog.objects.create(content_id=content_id)
-        # Trả về content_id và copied_at để frontend cập nhật giao diện
+        line_id = request.POST.get("line_id")
+        
+        log = CopyLog.objects.create(
+            content_id=content_id,
+            content_line_id=line_id if line_id else None
+        )
+        # Trả về content_id, line_id và copied_at để frontend cập nhật giao diện
         return JsonResponse({
             "status": "ok",
             "content_id": content_id,
+            "line_id": line_id,
             "copied_at": localtime(log.copied_at).strftime("%d/%m/%Y %H:%M:%S")
         })
 
 def get_copy_logs(request):
     """API để frontend polling lấy danh sách copy logs"""
     if request.method == 'GET':
-        contents = Content.objects.all()
+        from ..models import ContentLine
+        lines = ContentLine.objects.all()
         data = {}
-        for content in contents:
-            logs = content.copy_logs.all().order_by('-copied_at')[:20]  # Lấy 20 bản ghi mới nhất
-            data[content.id] = [localtime(log.copied_at).strftime("%d/%m/%Y %H:%M:%S") for log in logs]
+        for line in lines:
+            logs = line.copy_logs.all().order_by('-copied_at')[:20]  # Lấy 20 bản ghi mới nhất
+            data[line.id] = [localtime(log.copied_at).strftime("%d/%m/%Y %H:%M:%S") for log in logs]
         return JsonResponse({"copy_logs": data})
+

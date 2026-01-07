@@ -74,7 +74,7 @@ def content_client(request):
         
         s = request.GET.get('s')
         if s:
-            list_content = list_content.filter(Q(content__icontains=s))
+            list_content = list_content.filter(Q(title__icontains=s))
             context['s'] = s
         
         # Phân trang 15 bản ghi/trang
@@ -86,3 +86,25 @@ def content_client(request):
         context['page_obj'] = page_obj
         
         return render(request, 'sleekweb/client/content_client.html', context, status=200)
+
+
+def content_detail_client(request, slug):
+    """Hiển thị trang content riêng cho mỗi client"""
+    if request.method == 'GET':
+        context = {}
+        context['domain'] = settings.DOMAIN
+        
+        # Lấy content theo slug
+        content_obj = get_object_or_404(Content, slug=slug)
+        context['content'] = content_obj
+        
+        # Lấy tất cả lines và phân trang 50 dòng/trang
+        all_lines = content_obj.lines.all().order_by('order')
+        paginator = Paginator(all_lines, 50)
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+        
+        context['lines'] = page_obj
+        context['page_obj'] = page_obj
+        
+        return render(request, 'sleekweb/client/content_detail_client.html', context, status=200)
