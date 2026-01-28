@@ -425,7 +425,7 @@
             Lưu ý: Muốn xem ổn định/đầy đủ, hãy mở bằng <strong>Safari (iOS)</strong> hoặc <strong>trình duyệt Chrome (Android)</strong>.
         </div>
         <form action="" method="get">
-            <input id="search-input" name="s" class="search-input" type="text" placeholder="Nhập Tên Video Việt để tìm..." autocomplete="off">
+            <input id="search-input" name="s" class="search-input" type="text" placeholder="Nhập Tên Video để tìm..." autocomplete="off">
         </form>
         <div id="search-results" class="search-results" style="display:none;" bis_skin_checked="1"></div>
     </div>
@@ -451,13 +451,13 @@
         <div class="top-title" bis_skin_checked="1">📺 Video đề xuất</div>
         <div id="top-grid" class="top-grid" bis_skin_checked="1">
             {% for i in Product %}
-            <div class="top-card" bis_skin_checked="1">
+            <a class="top-card" href="{% url 'home' slug=i.Slug %}" bis_skin_checked="1">
                 <div class="top-card-wrapper" bis_skin_checked="1">
                     <img class="top-card-img" src="{{ i.Avatar.url }}" alt="{{ i.Title }}">
                     <div class="top-card-rank" bis_skin_checked="1">TOP {{ forloop.counter }}</div>
                 </div>
                 <div class="top-card-name" bis_skin_checked="1">{{ i.Title }}</div>
-            </div>
+            </a>
             {% endfor %}
         </div>
     </div>
@@ -471,13 +471,15 @@
 
     <!-- NÚT CỘNG ĐỒNG -->
     <div class="link-buttons" bis_skin_checked="1">
-        <a id="fanpage-link" class="link-btn" href="https://www.facebook.com/groups/luyeuvideo" target="_blank" rel="noopener noreferrer">Tham gia nhóm Fanpage</a>
-        <a id="youtube-link" class="link-btn" href="https://youtube.com/channel/UCb35SXg3vJeYP5povmGHA1A?sub_confirmation=1" target="_blank" rel="noopener noreferrer">Theo dõi &amp; nhấn chuông YTB</a>
+        <!--
+        <a id="fanpage-link" class="link-btn" href="" target="_blank" rel="noopener noreferrer">Tham gia nhóm Fanpage</a>
+        <a id="youtube-link" class="link-btn" href="" target="_blank" rel="noopener noreferrer">Theo dõi &amp; nhấn chuông YTB</a>
+        -->
     </div>
 
     <!-- LƯU Ý (DISCLAIMER) -->
     <div id="disclaimer-home" style="margin-top: 14px; font-size: 12px; color: #888; text-align: left;" bis_skin_checked="1">
-        <strong>Lưu ý:</strong> Phần dịch + lồng tiếng (AI) tạo bởi team Lu Yêu Video. Video gốc lấy từ các nguồn phổ biến trên Internet. Nếu bạn cho rằng quyền lợi bị ảnh hưởng, vui lòng liên hệ để gỡ. Fanpage: <a href="https://www.facebook.com/luyeuvideo.dramashorts/" target="_blank" rel="noopener noreferrer" style="color: #ee4d2d; text-decoration: underline;"><strong>Lu Yêu Video</strong></a>
+        <strong>Lưu ý:</strong> Phần dịch + lồng tiếng (AI) tạo bởi team Lu Yêu Video. Video gốc lấy từ các nguồn phổ biến trên Internet. Nếu bạn cho rằng quyền lợi bị ảnh hưởng, vui lòng liên hệ để gỡ. Fanpage: <a href="" target="_blank" rel="noopener noreferrer" style="color: #ee4d2d; text-decoration: underline;"><strong>Video</strong></a>
     </div>
 
     <!-- KHU VỰC XEM PHIM -->
