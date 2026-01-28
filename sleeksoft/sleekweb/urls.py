@@ -39,6 +39,7 @@ from django.contrib.auth import views as auth_views
 
 
 from .views.client.home_client import *
+from .views.client.home_list_client import *
 
 from .views.client.about_client import *
 from .views.client.booking_client import *
@@ -69,6 +70,8 @@ urlpatterns = [
 
     path('set-language/<str:lang_code>/', set_language, name='set_language'),
 
+    
+    path('',home_list,name='home_list'),
     path('video/<str:slug>',home,name='home'),
 
     path('about',about,name='about'),
