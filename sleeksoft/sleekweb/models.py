@@ -43,7 +43,7 @@ class Product(models.Model):
         verbose_name_plural = "Sản phẩm"
     
     Title = models.CharField('Tiêu đề', max_length=200,blank=True, null=True)
-    Slug = models.SlugField(unique=True, blank=True, null=True)
+    Slug = models.SlugField(max_length=500,unique=True, blank=True, null=True)
     Description = models.TextField('Mô tả',blank=True, null=True)
     Avatar = models.ImageField(upload_to='Avatar_Product', null=True,blank=True)
     Video = models.FileField(upload_to='Video_Product', null=True, blank=True)
